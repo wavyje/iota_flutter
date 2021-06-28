@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 
 import './loggedinprostitute.dart';
 import './imagePicker.dart';
+import './Buttons.dart';
+import './loading_screen.dart';
 
 // Define a custom Form widget.
 class MyCustomForm extends StatefulWidget {
@@ -94,7 +96,10 @@ class MyCustomFormState extends State<MyCustomForm> {
               return null;
             },
           ),
-          ElevatedButton(
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+          ),
+          CustomButton(
             onPressed: () {
               // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate()) {
@@ -109,25 +114,23 @@ class MyCustomFormState extends State<MyCustomForm> {
                 );
               }
             },
-            child: Text('Submit'),
+            buttonText: "Registrieren",
+            icon: Icons.check,
           ),
           ElevatedButton(
             onPressed: () {
-              // Validate returns true if the form is valid, or false otherwise.
-
-                // If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('Reading Data')));
-                readData();
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserMenu()),
+              );
             },
-            child: Text('Read Data: Debug'),
+            child: Text('Skip to Profile: Debug'),
           ),
           ElevatedButton(
             onPressed: () {
               getImage(ImageSource.gallery);
             },
-            child: Text('Read Data: Debug'),
+            child: Text('Choose Picture: Debug'),
           ),
           // Add TextFormFields and ElevatedButton here.
         ],

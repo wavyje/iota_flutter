@@ -4,6 +4,10 @@ import './question.dart';
 import './CustomForm.dart';
 import './DataInput.dart';
 import './scanner.dart';
+import './Buttons.dart';
+import 'dart:io';
+import './loggedinprostitute.dart';
+import './loading_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,20 +37,43 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Color.fromRGBO(255, 195, 193, 1),
+
+        ),
+
       home: Scaffold(
         appBar: AppBar(
-          title: Text('IOTA HEALTH'),
+          title: Text('IOTA HEALTH',
+            style: TextStyle(
+                color: Colors.white,
+            letterSpacing: 5,
+            ),
+          ),
+          centerTitle: true,
         ),
-        body: Column(
+        body: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Color(0xFFFAFAFA),
+                //Color(0xFFE1BEE7),
+                Color(0xFFD7CCC8)
+              ],
+
+            ),
+          ),
+        child: Column(
           children: <Widget>[
 
-            Text('Sie möchten sich registrieren oder anmelden?', textAlign: TextAlign.center,),
+
             ButtonTest(),
-            ElevatedButton(
-              onPressed: null,
-              child: Text('Anmeldung für Behörden'),
-            ),
+
           ],
+        ),
         ),
       ),
     );
@@ -60,23 +87,41 @@ class ButtonTest extends StatelessWidget {
       return Form(
       child: Column(
         children: <Widget>[
-          ElevatedButton(
-            child: Text('Qr Code scannen'),
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 190, bottom: 0),
+          ),
+          CustomButton(
             onPressed: () { Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Scanner()),
           );},
+            buttonText: "Qr code scannen",
+            icon: Icons.qr_code_2_outlined,
           ),
-          ElevatedButton(
-            child: Text('Anmeldung für Prostituierte'),
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
+          ),
+          CustomButton(
             onPressed: () {Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => DataInput()),
             );},
+            buttonText: "Anmeldung für Benutzer",
+            icon: Icons.account_circle_outlined,
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
+          ),
+          CustomButton(
+            onPressed: () => onLoading(context),
+            buttonText: "LogIn Behörde/Arzt",
+            icon: Icons.house_outlined,
           ),
         ],
       )
       );
   }
+
+
 }
 
