@@ -75,7 +75,9 @@ class _QrPageState extends State<QrPage> {
               Container(
                 margin: EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 0),
               ),
-              CustomButton(onPressed: () => null,
+              CustomButton(onPressed: () { Navigator.pop(
+                context,
+              );},
                   buttonText: "Abbrechen",
                   icon: Icons.cancel)
             ]
