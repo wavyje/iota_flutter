@@ -26,6 +26,7 @@ dependencies:
   http: 0.13.3
   path_provider: 2.0.2
   qr_code_scanner: 0.5.1
+  qr_flutter: 4.0.0
   url_launcher: 6.0.7
   image_picker: 0.8.1+1
   shared_preferences: 2.0.6
@@ -56,6 +57,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/IOTA_Spawn.gif
+    - assets/images/pngaaa.com-1363795.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

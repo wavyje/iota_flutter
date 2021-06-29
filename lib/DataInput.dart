@@ -12,15 +12,30 @@ class DataInput extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Registrieren', style: TextStyle(color: Colors.white,),
+          title: Text('Registrieren', style: TextStyle(color: Colors.white, letterSpacing: 5),
           ),
           centerTitle: true,
         ),
-        body: Column(
+        body: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Color(0xFFFAFAFA),
+                //Color(0xFFE1BEE7),
+                Color(0xFFD7CCC8)
+              ],
+
+            ),
+          ),
+        child: Column(
           children: <Widget>[
             MyCustomForm(),
           ],
         ),
+      ),
       ),
     );
   }

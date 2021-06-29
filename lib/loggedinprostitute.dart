@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import './imagePicker.dart';
 import './Buttons.dart';
 import './profile_page.dart';
+import './qr_page.dart';
 
 class UserMenu extends StatefulWidget {
   @override
@@ -30,6 +32,20 @@ class _UserMenuState extends State<UserMenu> {
   Widget build(BuildContext context) {
 
     return Material(
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[
+              Color(0xFFFAFAFA),
+              //Color(0xFFE1BEE7),
+              Color(0xFFD7CCC8)
+            ],
+
+          ),
+        ),
       child: Column(
         children: <Widget>[
           AppBar(title: Text("IOTA HEALTH",
@@ -50,22 +66,34 @@ class _UserMenuState extends State<UserMenu> {
             radius: 100,
           ),
           Container(
-            margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+            margin: EdgeInsets.only(left:0, top:70, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () { Navigator.push(
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 195),
+          child: CustomButton(onPressed: () { Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProfilePage()),
           );},
               buttonText: "Persönliche Daten", icon: Icons.account_circle_outlined),
+          ),
           Container(
             margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () => null, buttonText: "Zertifikate", icon: Icons.badge_outlined),
-          Container(
-            margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 195),
+            child: CustomButton(onPressed: () => null, buttonText: "Zertifikate", icon: Icons.badge_outlined),
           ),
-          CustomButton(onPressed: () => null, buttonText: "Qr Code erstellen", icon: Icons.qr_code_2_outlined),
-        ],
+          Container(
+            margin: EdgeInsets.only(left:0, top:100, right:0, bottom:0),
+          ),
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 285),
+          child: CustomButton(onPressed: () { Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => QrPage()),
+              );},
+              buttonText: "Qr Code erstellen", icon: Icons.qr_code_2_outlined),
+    ),
+
+    ],
+      ),
       ),
     );
   }

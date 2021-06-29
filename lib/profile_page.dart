@@ -35,8 +35,21 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
 
     return Material(
-      child: Column(
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[
+              Color(0xFFFAFAFA),
+              //Color(0xFFE1BEE7),
+              Color(0xFFD7CCC8)
+            ],
 
+          ),
+        ),
+      child: Column(
         children: <Widget>[
           AppBar(title: Text("IOTA HEALTH",
             style: TextStyle(
@@ -56,27 +69,81 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 100,
           ),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-          Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-          child: Text("Vorname, Nachname:    " + _name,
-
-          ),
-          ),
-          Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-          child: Text("Addresse:    " + _address),
-          ),
-          Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-          child: Text("Geburtstag:    " + _birthday),
-          ),
-          Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-          child: Text("Geburtsort:    " + _birthplace),
-          ),
+          IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[ Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+              Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+              child: Text("Name",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+              child: Text("Addresse",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+              child: Text("Geburtstag",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              ),
+              Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+              child: Text("Geburtsort",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              ),
         ],
       ),
-    ]
-    )
+                 Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                 child: const VerticalDivider(color: Colors.black, thickness: 2, width: 20,),
+                 ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                  child: Text(_name,
+
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                  child: Text(_address),
+                ),
+                Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                  child: Text(_birthday),
+                ),
+                Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                  child: Text(_birthplace),
+                ),
+              ],
+
+            ),
+          ]
+          ),
+
+          ),
+          Container(
+            margin: EdgeInsets.only(left:0, top:125, right:0, bottom:0),
+          ),
+          CustomButton(onPressed: () => null, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
+            ]
+
+    ),
+      ),
     );
   }
 

@@ -69,7 +69,6 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           children: <Widget>[
 
-
             ButtonTest(),
 
           ],
@@ -88,9 +87,12 @@ class ButtonTest extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 0, right: 0, top: 190, bottom: 0),
+            margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
           ),
-          CustomButton(
+          Text("Zertifikate überprüfen...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),),
+          Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
+          child: CustomButton(
             onPressed: () { Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Scanner()),
@@ -98,10 +100,14 @@ class ButtonTest extends StatelessWidget {
             buttonText: "Qr code scannen",
             icon: Icons.qr_code_2_outlined,
           ),
+          ),
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
           ),
-          CustomButton(
+          Text("Zertifikate speichern...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),),
+          Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
+          child: CustomButton(
             onPressed: () {Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => DataInput()),
@@ -109,19 +115,21 @@ class ButtonTest extends StatelessWidget {
             buttonText: "Anmeldung für Benutzer",
             icon: Icons.account_circle_outlined,
           ),
-          Container(
-            margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
           ),
-          CustomButton(
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
+          ),
+          ConstrainedBox(constraints: BoxConstraints.tightFor(width: 207),
+          child: CustomButton(
             onPressed: () => onLoading(context),
             buttonText: "LogIn Behörde/Arzt",
             icon: Icons.house_outlined,
+          ),
           ),
         ],
       )
       );
   }
-
-
 }
+
 
