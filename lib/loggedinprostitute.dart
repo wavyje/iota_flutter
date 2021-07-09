@@ -39,9 +39,9 @@ class _UserMenuState extends State<UserMenu> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color(0xFFFAFAFA),
+              Colors.deepPurpleAccent,
               //Color(0xFFE1BEE7),
-              Color(0xFFD7CCC8)
+              Colors.purpleAccent
             ],
 
           ),

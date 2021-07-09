@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
           children: <Widget>[
             Icon(
               icon,
-              color: Color.fromRGBO(255, 195, 193, 1),
+              color: Colors.black,
             ),
             SizedBox(
               width: 10.0,

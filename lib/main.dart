@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import './question.dart';
 import './CustomForm.dart';
 import './DataInput.dart';
@@ -8,6 +7,7 @@ import './Buttons.dart';
 import 'dart:io';
 import './loggedinprostitute.dart';
 import './loading_screen.dart';
+import './office_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +38,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(255, 195, 193, 1),
+
+        primaryColor: Colors.deepPurpleAccent,
 
         ),
 
@@ -59,9 +60,9 @@ class _MyAppState extends State<MyApp> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                Color(0xFFFAFAFA),
+                Colors.deepPurpleAccent,
                 //Color(0xFFE1BEE7),
-                Color(0xFFD7CCC8)
+                Colors.purpleAccent
               ],
 
             ),
@@ -89,7 +90,7 @@ class ButtonTest extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
           ),
-          Text("Zertifikate überprüfen...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),),
+          Text("Zertifikate überprüfen...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
@@ -104,7 +105,7 @@ class ButtonTest extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
           ),
-          Text("Zertifikate speichern...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),),
+          Text("Zertifikate speichern...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
@@ -121,7 +122,10 @@ class ButtonTest extends StatelessWidget {
           ),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 207),
           child: CustomButton(
-            onPressed: () => onLoading(context),
+            onPressed: () {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OfficePage()),
+            );},
             buttonText: "LogIn Behörde/Arzt",
             icon: Icons.house_outlined,
           ),

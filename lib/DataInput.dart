@@ -8,7 +8,7 @@ class DataInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(255, 195, 193, 1),
+        primaryColor: Colors.deepPurpleAccent,
       ),
       home: Scaffold(
         appBar: AppBar(
@@ -23,9 +23,9 @@ class DataInput extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                Color(0xFFFAFAFA),
+                Colors.deepPurpleAccent,
                 //Color(0xFFE1BEE7),
-                Color(0xFFD7CCC8)
+                Colors.purpleAccent
               ],
 
             ),

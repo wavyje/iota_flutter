@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iota_app/loading_screen.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:io';
@@ -16,18 +20,53 @@ class QrPage extends StatefulWidget {
 }
 
 class _QrPageState extends State<QrPage> {
-
+  var _channel;
   String _imagePath = "";
+  String _json = "";
 
   @override
-  void initState() {
-    super.initState();
+  void initState(){
+    _loadData();
     _loadImage();
+    _joinServer();
+    //streamController.addStream(_channel.stream);
+
+
+    print("Creating a StreamController...");
+    //First subscription
+    /*StreamSubscription sub = streamController.stream.listen((data) {
+      print("DataReceived1: " + data);
+      if(data == "RequestData") {
+        streamController.add(_json);
+      }
+      }, onDone: () {
+      print("Task Done1");
+    }, onError: (error) {
+      print("Some Error1");
+    });*/
+
+    _channel.stream.forEach((element) {
+      print(element);
+      if(element == "RequestData")  {
+        _channel.sink.add(_json);
+
+        Future.delayed(new Duration(seconds: 0), () {
+          onLoading(context);
+        });
+      }
+
+    });
+
+    super.initState();
   }
+
+
   // for different input, calls build method and rebuilds the widget tree
 
   @override
   Widget build(BuildContext context) {
+
+
     return Material(
       child: Container(
         alignment: Alignment.center,
@@ -36,9 +75,9 @@ class _QrPageState extends State<QrPage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color(0xFFFAFAFA),
+              Colors.deepPurpleAccent,
               //Color(0xFFE1BEE7),
-              Color(0xFFD7CCC8)
+              Colors.purpleAccent
             ],
 
           ),
@@ -66,7 +105,8 @@ class _QrPageState extends State<QrPage> {
                 margin: EdgeInsets.only(left: 0, top: 30, right: 0, bottom: 0),
               ),
               QrImage(
-                data: 'https://wikipedia.com',
+                //ws://192.168.0.202:8080/cdab716e-5269-4b86-b770-bba772be4962
+                data: 'UploadCertificate/cdab716e-5269-4b86-b770-bba772be4962',
                 version: QrVersions.auto,
                 size: 240,
                 gapless: false,
@@ -79,7 +119,8 @@ class _QrPageState extends State<QrPage> {
                 context,
               );},
                   buttonText: "Abbrechen",
-                  icon: Icons.cancel)
+                  icon: Icons.cancel),
+
             ]
 
         ),
@@ -92,5 +133,37 @@ class _QrPageState extends State<QrPage> {
     setState(() {
       _imagePath = (prefs.getString('profile_image') ?? "Not Found");
     });
+  }
+
+  void _joinServer() {
+    _channel = WebSocketChannel.connect(
+      Uri.parse('ws://192.168.0.202:8080/cdab716e-5269-4b86-b770-bba772be4962'),
+    );
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close();
+    super.dispose();
+  }
+
+  void _loadData() async {
+    final file = await _localFile;
+
+    //Read the file
+    final contents = await file.readAsString();
+    //final Map<String, dynamic> json = jsonDecode(contents);
+
+    _json = contents;
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/data.txt');
   }
 }

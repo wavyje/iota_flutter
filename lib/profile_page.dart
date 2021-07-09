@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
 import './Buttons.dart';
+import 'websocket_test.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -42,9 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color(0xFFFAFAFA),
+              Colors.deepPurpleAccent,
               //Color(0xFFE1BEE7),
-              Color(0xFFD7CCC8)
+              Colors.purpleAccent
             ],
 
           ),
@@ -139,7 +140,10 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             margin: EdgeInsets.only(left:0, top:125, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () => null, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
+          CustomButton(onPressed: () { Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WsPage()),
+          );}, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
             ]
 
     ),

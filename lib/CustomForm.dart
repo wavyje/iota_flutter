@@ -45,9 +45,12 @@ class MyCustomFormState extends State<MyCustomForm> {
       child: Column(
         children: <Widget>[
           TextFormField(decoration: const InputDecoration(
-            icon: Icon(Icons.person),
-            labelText: 'Vorname, Nachname',
+            icon: Icon(Icons.person, color: Colors.white,),
+            labelText: 'Vorname, Nachname', labelStyle: TextStyle(color: Colors.white),
+            fillColor: Colors.white,
+            focusColor: Colors.white
           ),
+            cursorColor: Colors.white,
             controller: name,
             // The validator receives the text that the user has entered.
             validator: (value) {
