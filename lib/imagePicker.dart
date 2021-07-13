@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future getImage(ImageSource imageSource) async {
+Future<bool> getImage(ImageSource imageSource) async {
 
   final ImagePicker _picker = new ImagePicker();
 
@@ -13,7 +13,7 @@ Future getImage(ImageSource imageSource) async {
   final PickedFile? image = await _picker.getImage(source: imageSource);
 
   if(image == null) {
-    return;
+    return false;
   }
 
 final file = await _localFile;
@@ -31,6 +31,8 @@ final file = await _localFile;
   print("");
   print("");
   print(tmpFile.path);
+
+  return true;
 }
 
 //TODO: REMOVE

@@ -12,7 +12,7 @@ import './imagePicker.dart';
 import './Buttons.dart';
 import './loading_screen.dart';
 
-// Define a custom Form widget.
+
 class MyCustomForm extends StatefulWidget {
   @override
   MyCustomFormState createState() {
@@ -21,20 +21,17 @@ class MyCustomForm extends StatefulWidget {
 }
 
 
-// Define a corresponding State class.
-// This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
+
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController name = TextEditingController();
-  TextEditingController address = TextEditingController();
+  bool image = false;
+
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
   TextEditingController birthday = TextEditingController();
   TextEditingController birthplace = TextEditingController();
+  TextEditingController address = TextEditingController();
 
 
   @override
@@ -46,55 +43,80 @@ class MyCustomFormState extends State<MyCustomForm> {
         children: <Widget>[
           TextFormField(decoration: const InputDecoration(
             icon: Icon(Icons.person, color: Colors.white,),
-            labelText: 'Vorname, Nachname', labelStyle: TextStyle(color: Colors.white),
+            labelText: 'Vorname', labelStyle: TextStyle(color: Colors.white),
             fillColor: Colors.white,
             focusColor: Colors.white
           ),
             cursorColor: Colors.white,
-            controller: name,
+            controller: firstName,
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return 'Pflichtfeld';
               }
               return null;
             },
           ),
           TextFormField(decoration: const InputDecoration(
             icon: Icon(Icons.home),
-            labelText: 'Addresse',
+            labelText: 'Nachname', labelStyle: TextStyle(color: Colors.white),
+            fillColor: Colors.white,
+            focusColor: Colors.white
           ),
-            controller: address,
+            cursorColor: Colors.white,
+            controller: lastName,
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return 'Pflichtfeld';
               }
               return null;
             },
           ),
           TextFormField(decoration: const InputDecoration(
             icon: Icon(Icons.calendar_today),
-            labelText: 'Geburtstag',
+            labelText: 'Geburtstag',labelStyle: TextStyle(color: Colors.white),
+              fillColor: Colors.white,
+              focusColor: Colors.white
           ),
+            cursorColor: Colors.white,
             controller: birthday,
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return 'Pflichtfeld';
               }
               return null;
             },
           ),
           TextFormField(decoration: const InputDecoration(
             icon: Icon(Icons.local_hospital),
-            labelText: 'Geburtsort',
+            labelText: 'Geburtsort',labelStyle: TextStyle(color: Colors.white),
+              fillColor: Colors.white,
+              focusColor: Colors.white
           ),
+            cursorColor: Colors.white,
             controller: birthplace,
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return 'Pflichtfeld';
+              }
+              return null;
+            },
+          ),
+          TextFormField(decoration: const InputDecoration(
+            icon: Icon(Icons.calendar_today),
+            labelText: 'Wohnort',labelStyle: TextStyle(color: Colors.white),
+              fillColor: Colors.white,
+              focusColor: Colors.white
+          ),
+            cursorColor: Colors.white,
+            controller: address,
+            // The validator receives the text that the user has entered.
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Pflichtfeld';
               }
               return null;
             },
@@ -104,13 +126,24 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
           CustomButton(
             onPressed: () {
+              getImage(ImageSource.gallery).then((value) => image = value);
+            },
+            buttonText: "Bild auswählen",
+            icon: Icons.image
+          ),
+          Text("Gesicht muss eindeutig identifizierbar sein", style: TextStyle(color: Colors.white),),
+          if(!image)
+            Text("Ein Bild muss hochgeladen werden", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
+          ),
+          CustomButton(
+            onPressed: () {
               // Validate returns true if the form is valid, or false otherwise.
-              if (_formKey.currentState!.validate()) {
-                // If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
+              if (_formKey.currentState!.validate() ) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text('Processing Data')));
-                saveData(name.text, address.text, birthday.text, birthplace.text);
+                saveData(firstName.text, lastName.text, birthday.text, birthplace.text, address.text);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserMenu()),
@@ -122,6 +155,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
           ElevatedButton(
             onPressed: () {
+
               Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => UserMenu()),
@@ -129,12 +163,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
             child: Text('Skip to Profile: Debug'),
           ),
-          ElevatedButton(
-            onPressed: () {
-              getImage(ImageSource.gallery);
-            },
-            child: Text('Choose Picture: Debug'),
-          ),
+
           // Add TextFormFields and ElevatedButton here.
         ],
       ),
@@ -158,11 +187,12 @@ Future<http.Response> createAlbum(String name, String address, String birthday, 
   );
 }
 
-Future<File> saveData(String name, String address, String birthday, String birthplace) async{
-  Map json = {'name': name,
-              'address': address,
+Future<File> saveData(String firstName, String lastName, String birthday, String birthplace, String address) async{
+  Map json = {'firstName': firstName,
+              'lastName': lastName,
               'birthday': birthday,
-              'birthplace': birthplace};
+              'birthplace': birthplace,
+              'address': address};
 
   print("Input:");
   print(json);

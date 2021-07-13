@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iota_app/loading_screen.dart';
+
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -20,44 +20,52 @@ class QrPage extends StatefulWidget {
 }
 
 class _QrPageState extends State<QrPage> {
+
+
   var _channel;
   String _imagePath = "";
   String _json = "";
 
+  bool loading = false;
+  bool success = false;
+
   @override
   void initState(){
-    _loadData();
-    _loadImage();
-    _joinServer();
-    //streamController.addStream(_channel.stream);
 
 
-    print("Creating a StreamController...");
-    //First subscription
-    /*StreamSubscription sub = streamController.stream.listen((data) {
-      print("DataReceived1: " + data);
-      if(data == "RequestData") {
-        streamController.add(_json);
-      }
-      }, onDone: () {
-      print("Task Done1");
-    }, onError: (error) {
-      print("Some Error1");
-    });*/
+
+      _loadData();
+      _loadImage();
+      _joinServer();
+
 
     _channel.stream.forEach((element) {
       print(element);
       if(element == "RequestData")  {
         _channel.sink.add(_json);
 
-        Future.delayed(new Duration(seconds: 0), () {
-          onLoading(context);
+        setState(() {
+          loading = true;
         });
+
+      }
+      if(element.contains("appInst")) {
+        print(element);
+        saveLinks(element);
+        print("Links saved");
+
+        setState(() {
+          loading = false;
+          success = true;
+        });
+
+        _channel.sink.close();
       }
 
     });
 
-    super.initState();
+      super.initState();
+
   }
 
 
@@ -104,6 +112,7 @@ class _QrPageState extends State<QrPage> {
               Container(
                 margin: EdgeInsets.only(left: 0, top: 30, right: 0, bottom: 0),
               ),
+              if(!loading && !success)
               QrImage(
                 //ws://192.168.0.202:8080/cdab716e-5269-4b86-b770-bba772be4962
                 data: 'UploadCertificate/cdab716e-5269-4b86-b770-bba772be4962',
@@ -111,15 +120,35 @@ class _QrPageState extends State<QrPage> {
                 size: 240,
                 gapless: false,
               ),
-
+              if(loading && !success)
+                CircleAvatar(backgroundImage: Image
+                    .asset('assets/images/IOTA_Spawn.gif')
+                    .image,
+                  radius: 100,
+                  backgroundColor: Colors.transparent,
+                ),
+              if(!loading && success)
+                CircleAvatar(backgroundImage: Image
+                    .asset('assets/images/check.png')
+                    .image,
+                  radius: 100,
+                  backgroundColor: Colors.transparent,
+                ),
+              if(!loading && success)
+                Text("Zertifikat erfolgreich erstellt!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               Container(
                 margin: EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 0),
               ),
-              CustomButton(onPressed: () { Navigator.pop(
-                context,
-              );},
+              if(!success)
+              CustomButton(onPressed: () { Navigator.pop(context,);
+              },
                   buttonText: "Abbrechen",
                   icon: Icons.cancel),
+              if(success)
+                CustomButton(onPressed: () { Navigator.pop(context,);
+                },
+                    buttonText: "Okay",
+                    icon: Icons.check),
 
             ]
 
@@ -166,4 +195,21 @@ class _QrPageState extends State<QrPage> {
     final path = await _localPath;
     return File('$path/data.txt');
   }
+
+  Future<File> get _localLinkFile async {
+    final path = await _localPath;
+    return File('$path/links.txt');
+  }
+
+  Future<File> saveLinks(json) async{
+
+    print(json);
+
+    final file = await _localFile;
+
+    //Write the file
+
+    return file.writeAsString(jsonEncode(json));
+  }
 }
+

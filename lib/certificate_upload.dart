@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
 import 'package:iota_app/CustomForm.dart';
+import 'package:iota_app/loading_screen.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 
@@ -23,13 +24,15 @@ class CertificateUpload extends StatefulWidget {
 class _CertificateUploadState extends State<CertificateUpload> {
   final String roomId;
   var _channel;
-  String name = "";
-  String address = "";
+  String firstName = "";
+  String lastName = "";
   String birthday = "";
   String birthplace = "";
+  String address = "";
 
   bool dataArrived = false;
-  String success = "";
+  bool loading = false;
+  bool success = false;
   TextEditingController controller = TextEditingController();
 
   _CertificateUploadState({required this.roomId});
@@ -42,10 +45,10 @@ class _CertificateUploadState extends State<CertificateUpload> {
     _sendRequestData();
 
     _channel.stream.forEach((element) {
-
-      if(element.startsWith("{"))  {
+      if(element.startsWith("{")) {
         setState(() {
-          name = jsonDecode(element)['name'];
+          firstName = jsonDecode(element)['firstName'];
+          lastName = jsonDecode(element)['lastName'];
           address = jsonDecode(element)['address'];
           birthday = jsonDecode(element)['birthday'];
           birthplace = jsonDecode(element)['birthplace'];
@@ -54,6 +57,9 @@ class _CertificateUploadState extends State<CertificateUpload> {
         });
 
         _channel.sink.add("Empfangen");
+        setState(() {
+          loading = true;
+        });
       }
     });
 
@@ -91,13 +97,46 @@ class _CertificateUploadState extends State<CertificateUpload> {
             children: <Widget>[
               Text(roomId),
 
-              Text("Name: " + name),
-              Text("Addresse: " + address),
-              Text("Geburtstag: " + birthday),
-              Text("Geburtsort: " + birthplace),
-              if(dataArrived)
-              CustomButton(onPressed: () => getResponse(), buttonText: "Zertifikat hochladen", icon: Icons.check),
-              Text(success),
+              Text("Vorname: " + firstName, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              Text("Nachname: " + lastName, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              Text("Geburtstag: " + birthday, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              Text("Geburtsort: " + birthplace, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              Text("Wohnort: " + address, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              if(dataArrived && !success)
+              CustomButton(onPressed: () { getResponse(); },
+                  buttonText: "Zertifikat hochladen", icon: Icons.check),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              if(loading)
+                CircleAvatar(backgroundImage: Image
+                    .asset('assets/images/IOTA_Spawn.gif')
+                    .image,
+                  radius: 100,
+                  backgroundColor: Colors.transparent,
+                ),
+              if(success)
+                CircleAvatar(backgroundImage: Image
+                    .asset('assets/images/check.png')
+                    .image,
+                  radius: 100,
+                  backgroundColor: Colors.transparent,
+                ),
             ],
           ),
         ),
@@ -122,12 +161,13 @@ class _CertificateUploadState extends State<CertificateUpload> {
     super.dispose();
   }
 
-  Future<http.Response> createAlbum(String password, String name, String address, String birthday, String birthplace) {
+  Future<http.Response> createAlbum(String password, String firstName, String lastName, String birthday, String birthplace, String address) {
     Map json = {'password': password,
-      'name': name,
-      'address': address,
+      'firstName': firstName,
+      'lastName': lastName,
       'birthday': birthday,
-      'birthplace': birthplace};
+      'birthplace': birthplace,
+      'address': address};
     print(json);
     return http.post(
 
@@ -151,21 +191,12 @@ class _CertificateUploadState extends State<CertificateUpload> {
   }
 
   //sends password to server, if okay, send data
-  void getResponse() async {
+  Future getResponse() async {
 
+      String result = await showDialog(context: context, builder: (BuildContext context) {
 
-
-    /*if (response.statusCode == 200) {
-      print(response.body);
-      setState(() {
-        success = response.body;
-      });*/
-      showDialog(context: context, builder: (context) {
-
-        return StatefulBuilder(builder: (context, setState) {
-          bool passwordIncorrect = false;
           return Dialog(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             elevation: 0,
             child: new Column(
               mainAxisSize: MainAxisSize.min,
@@ -195,57 +226,55 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
                           if(response.statusCode == 200) {
                             print(response.body);
-                              passwordIncorrect = false;
-                              response = await createAlbum(controller.text, name, address, birthday, birthplace);
+
+                            Navigator.of(context).pop("true");
+
+                              response = await createAlbum(controller.text, firstName, lastName, birthday, birthplace, address);
 
                               if(response.statusCode == 200) {
                                 print(response.body);
+                                 _channel.sink.add(response.body);
+                                 _channel.sink.close();
+
                               }
                               else {
-                                print("Upload failed");
+                                Navigator.of(context).pop("error");
                               }
 
                           //then createAlbum
                           }
                           else {
                           print("Response failed");
+                          Navigator.of(context).pop("password");
                           }
 
                           },
                     buttonText: "Mit Passwort bestätigen",
                     icon: Icons.check),
-                  passwordIncorrect ?
-                  Text("Passwort falsch, erneut eingeben",
-                    style: TextStyle(color: Colors.red),) : Text("")
               ],
             ),
           );
-        }
-        );
       }
       );
 
+      if(result == "true") {
+        setState(() {
+          loading = false;
+          success = true;
+        });
+      }
+      else if(result == "error") {
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(content: Text("Upload fehlgeschlagen, erneut versuchen"));
+        });
+      }
+      else if(result == "password") {
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(content: Text("Passwort falsch, erneut versuchen"));
+        });
+      }
+
     }
-
-    //send password and then data
-    /*void sendCertificate() async {
-        var response = await sendPassword(controller.text);
-
-        if(response.statusCode == 200) {
-          print(response.body);
-          passwordIncorrect = false;
-          build(context);
-          //then createAlbum
-        }
-        else {
-          setState(() {
-            passwordIncorrect = true;
-          });
-          build(context);
-          print(response.statusCode);
-        }
-
-    }*/
 
 
 }

@@ -41,7 +41,7 @@ class _WsState extends State<WsPage> {
                 //return Text(snapshot.hasData ? '${snapshot.data}' : '');
                 if('${snapshot.data}' == 'hallo') {
                   Future.delayed(Duration.zero, () async {
-                  onLoading(context);
+                  //onLoading(context);
                   });
                 }
                 return Text(snapshot.hasData ? '${snapshot.data}' : '');

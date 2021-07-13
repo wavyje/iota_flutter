@@ -18,10 +18,13 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   String _imagePath = "";
-  String _name = "";
-  String _address = "";
+  String _lastName = "";
+  String _firstName = "";
   String _birthday = "";
   String _birthplace = "";
+  String _address = "";
+
+  bool showLoading = false;
 
   @override
   void initState() {
@@ -77,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Name",
+              child: Text("Vorname",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -85,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ),
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Addresse",
+              child: Text("Nachname",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -108,6 +111,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               ),
+                  Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                    child: Text("Wohnort",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ),
         ],
       ),
                  Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
@@ -117,18 +128,21 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-                  child: Text(_name,
-
+                  child: Text(_firstName,
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-                  child: Text(_address),
+                  child: Text(_lastName,
+                  ),
                 ),
                 Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
                   child: Text(_birthday),
                 ),
                 Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
                   child: Text(_birthplace),
+                ),
+                Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
+                  child: Text(_address),
                 ),
               ],
 
@@ -138,19 +152,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
           ),
           Container(
-            margin: EdgeInsets.only(left:0, top:125, right:0, bottom:0),
+            margin: EdgeInsets.only(left:0, top:80, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () { Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WsPage()),
-          );}, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
+          CustomButton(onPressed: () { }, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
             ]
 
     ),
       ),
     );
   }
-
 
   void _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -167,7 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final Map<String, dynamic> json = jsonDecode(contents);
 
     setState(() {
-      _name = json['name'];
+      _firstName = json['firstName'];
+      _lastName = json['lastName'];
       _address = json['address'];
       _birthday = json['birthday'];
       _birthplace = json['birthplace'];

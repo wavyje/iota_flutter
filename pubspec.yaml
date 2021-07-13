@@ -59,6 +59,7 @@ flutter:
   assets:
     - assets/images/IOTA_Spawn.gif
     - assets/images/pngaaa.com-1363795.png
+    - assets/images/check.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

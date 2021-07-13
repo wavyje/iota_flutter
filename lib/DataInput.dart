@@ -16,7 +16,10 @@ class DataInput extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: Container(
+
+        body:
+        new ListView(
+        children: <Widget>[ Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -32,9 +35,13 @@ class DataInput extends StatelessWidget {
           ),
         child: Column(
           children: <Widget>[
-            MyCustomForm(),
+
+              MyCustomForm(),
+
           ],
         ),
+      ),
+          ]
       ),
       ),
     );
