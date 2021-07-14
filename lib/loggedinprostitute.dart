@@ -10,6 +10,7 @@ import './Buttons.dart';
 import './profile_page.dart';
 import './qr_page.dart';
 import './loading_screen.dart';
+import './saved_certificates.dart';
 
 class UserMenu extends StatefulWidget {
   @override
@@ -81,7 +82,7 @@ class _UserMenuState extends State<UserMenu> {
             margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
           ),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 195),
-            child: CustomButton(onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingScreen())); }, buttonText: "Zertifikate", icon: Icons.badge_outlined),
+            child: CustomButton(onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => CertificatePage())); }, buttonText: "Zertifikate", icon: Icons.badge_outlined),
           ),
           Container(
             margin: EdgeInsets.only(left:0, top:100, right:0, bottom:0),

@@ -8,6 +8,8 @@ import 'dart:io';
 import './loggedinprostitute.dart';
 import './loading_screen.dart';
 import './office_page.dart';
+import './customer_scan.dart';
+import './crypto.dart';
 
 void main() {
   runApp(MyApp());
@@ -94,10 +96,9 @@ class ButtonTest extends StatelessWidget {
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
-            onPressed: () { Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Scanner()),
-          );},
+            onPressed: () async {
+              await generateHash("Penis");
+              },
             buttonText: "Qr code scannen",
             icon: Icons.qr_code_2_outlined,
           ),

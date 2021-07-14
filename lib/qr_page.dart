@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iota_app/crypto.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,15 @@ class _QrPageState extends State<QrPage> {
   var _channel;
   String _imagePath = "";
   String _json = "";
+  String _expire = "";
+
+  String _lastName = "";
+  String _firstName = "";
+  String _birthday = "";
+  String _birthplace = "";
+  String _nationality = "";
+  String _address = "";
+  String _hashImage = "";
 
   bool loading = false;
   bool success = false;
@@ -49,10 +59,26 @@ class _QrPageState extends State<QrPage> {
         });
 
       }
+      if(element == "RequestCertificate")  {
+        Map merkleTree = {'leafAB': generateLeafAB(_hashImage, _firstName, _lastName, _birthplace),
+
+                          };
+
+
+        _channel.sink.add(_json);
+
+        setState(() {
+          loading = true;
+        });
+
+      }
       if(element.contains("appInst")) {
         print(element);
         saveLinks(element);
         print("Links saved");
+
+        saveCertificate();
+        print("Certificate saved");
 
         setState(() {
           loading = false;
@@ -181,11 +207,17 @@ class _QrPageState extends State<QrPage> {
 
     //Read the file
     final contents = await file.readAsString();
-    //final Map<String, dynamic> json = jsonDecode(contents);
+    Map jsonData = jsonDecode(contents);
+
+    _firstName = jsonData['firstName'];
+    _lastName = jsonData['lastName'];
+    _birthday = jsonData['birthdate'];
+    _firstName = jsonData['firstName'];
 
     _json = contents;
   }
 
+  //different paths and files
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
@@ -201,15 +233,36 @@ class _QrPageState extends State<QrPage> {
     return File('$path/links.txt');
   }
 
+  Future<File> get _localCertificateFile async {
+    final path = await _localPath;
+    return File('$path/certificate.txt');
+  }
+
+  Future<File> get _localImageFile async {
+    final path = await _localPath;
+    return File('$path/image');
+  }
+
   Future<File> saveLinks(json) async{
 
     print(json);
+    String jsonDataString = json.toString();
 
-    final file = await _localFile;
+    final jsonData = jsonDecode(jsonDataString);
+    _expire = jsonData['expireDate'];
+
+    final file = await _localLinkFile;
 
     //Write the file
 
-    return file.writeAsString(jsonEncode(json));
+    return file.writeAsString(jsonEncode(jsonData));
+  }
+
+  Future saveCertificate() async {
+    final file = await _localCertificateFile;
+
+    Map map = {'expireDate': _expire};
+    file.writeAsString(jsonEncode(map));
   }
 }
 

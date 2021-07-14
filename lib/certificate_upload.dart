@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
@@ -28,7 +29,10 @@ class _CertificateUploadState extends State<CertificateUpload> {
   String lastName = "";
   String birthday = "";
   String birthplace = "";
+  String nationality = "";
   String address = "";
+  String hashedImage = "";
+  String expireDate = "";
 
   bool dataArrived = false;
   bool loading = false;
@@ -52,6 +56,8 @@ class _CertificateUploadState extends State<CertificateUpload> {
           address = jsonDecode(element)['address'];
           birthday = jsonDecode(element)['birthday'];
           birthplace = jsonDecode(element)['birthplace'];
+          nationality = jsonDecode(element)['nationality'];
+          hashedImage = jsonDecode(element)['hashedImage'];
 
           dataArrived = true;
         });
@@ -113,7 +119,11 @@ class _CertificateUploadState extends State<CertificateUpload> {
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Wohnort: " + address, style: TextStyle(color: Colors.white),),
+              Text("Staatsangehörigkeit: " + nationality, style: TextStyle(color: Colors.white),),
+              Container(
+                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+              ),
+              Text("Addresse: " + address, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
@@ -161,13 +171,19 @@ class _CertificateUploadState extends State<CertificateUpload> {
     super.dispose();
   }
 
-  Future<http.Response> createAlbum(String password, String firstName, String lastName, String birthday, String birthplace, String address) {
+  Future<http.Response> createAlbum(String password, String firstName, String lastName, String birthday, String birthplace, String nationality, String address, String hashedImage) {
+
+    String expireDate = expire();
+
     Map json = {'password': password,
-      'firstName': firstName,
-      'lastName': lastName,
-      'birthday': birthday,
-      'birthplace': birthplace,
-      'address': address};
+                'firstName': firstName,
+                'lastName': lastName,
+                'birthday': birthday,
+                'birthplace': birthplace,
+                'nationality': nationality,
+                'address': address,
+                'hashedImage': hashedImage,
+                'expire': expireDate};
     print(json);
     return http.post(
 
@@ -229,11 +245,16 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
                             Navigator.of(context).pop("true");
 
-                              response = await createAlbum(controller.text, firstName, lastName, birthday, birthplace, address);
+                              response = await createAlbum(controller.text, firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
 
                               if(response.statusCode == 200) {
-                                print(response.body);
-                                 _channel.sink.add(response.body);
+                                //print(response.body);
+                                Map links = jsonDecode(response.body);
+                                links['expireDate'] = expireDate;
+                                //print(links);
+                                var linksjson = jsonEncode(links);
+                                print(linksjson);
+                                 _channel.sink.add(linksjson);
                                  _channel.sink.close();
 
                               }
@@ -276,5 +297,12 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
     }
 
-
+    String expire() {
+      DateTime rn = DateTime.now();
+      DateTime expire = rn.add(new Duration(days: 356));
+      final df = new DateFormat('dd-MM-yyyy');
+      final expireFormat =  df.format(expire);
+      expireDate = expireFormat;
+      return expireFormat;
+    }
 }

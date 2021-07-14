@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
 import './Buttons.dart';
-import 'websocket_test.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
