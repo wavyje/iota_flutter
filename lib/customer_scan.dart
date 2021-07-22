@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './certificate_upload.dart';
+import './check_certificate.dart';
 
 class CustomerScan extends StatefulWidget {
   @override
@@ -41,7 +42,7 @@ class _CustomerScanState extends State<CustomerScan> {
         Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CertificateUpload(key: UniqueKey(), roomId: arr[1])),
+          MaterialPageRoute(builder: (context) => CertificateCheck(key: UniqueKey(), roomId: arr[1])),
         );
       }
       controller.resumeCamera();

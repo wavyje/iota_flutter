@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iota_app/saved_certificates.dart';
 import './question.dart';
 import './CustomForm.dart';
 import './DataInput.dart';
@@ -96,9 +97,13 @@ class ButtonTest extends StatelessWidget {
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
-            onPressed: () async {
-              await generateHash("Penis");
-              },
+            onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CustomerScan())
+                );
+              }
+              ,
             buttonText: "Qr code scannen",
             icon: Icons.qr_code_2_outlined,
           ),

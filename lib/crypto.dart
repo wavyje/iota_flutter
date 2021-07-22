@@ -33,11 +33,11 @@ Future<String> generateHash(String object) async {
 Future<String> generateLeafAB(String hashImage, String firstName, String lastName, String birthplace) async {
   List tmp = [hashImage, firstName, lastName, birthplace];
 
-  List hash = [];
+  Map hash = Map();
 
   //generate individual hashes
   for(var i = 0; i < tmp.length; i++) {
-    hash[i] = generateHash(tmp[i]);
+    hash[i] = await generateHash(tmp[i]);
   }
 
   //combine them

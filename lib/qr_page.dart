@@ -26,7 +26,9 @@ class _QrPageState extends State<QrPage> {
   var _channel;
   String _imagePath = "";
   String _json = "";
+  String _links = "";
   String _expire = "";
+  Map _merkleTree = Map();
 
   String _lastName = "";
   String _firstName = "";
@@ -40,16 +42,17 @@ class _QrPageState extends State<QrPage> {
   bool success = false;
 
   @override
-  void initState(){
-
-
+  void initState() {
 
       _loadData();
       _loadImage();
       _joinServer();
 
+      //TODO: check if exists
+      _loadLinks();
 
-    _channel.stream.forEach((element) {
+
+    _channel.stream.forEach((element) async {
       print(element);
       if(element == "RequestData")  {
         _channel.sink.add(_json);
@@ -59,33 +62,49 @@ class _QrPageState extends State<QrPage> {
         });
 
       }
-      if(element == "RequestCertificate")  {
-        Map merkleTree = {'leafAB': generateLeafAB(_hashImage, _firstName, _lastName, _birthplace),
 
-                          };
+      if(element.contains("appInst") && !element.contains("leafAB")) {
+        if(!File('$_localPath/certificate.txt').existsSync()) {
+          print(element);
+          saveLinks(element);
+          print("Links saved");
 
+          saveCertificate();
+          print("Certificate saved");
 
-        _channel.sink.add(_json);
+          setState(() {
+            loading = false;
+            success = true;
+          });
 
-        setState(() {
-          loading = true;
-        });
-
+          _channel.sink.close();
+        }
       }
-      if(element.contains("appInst")) {
-        print(element);
-        saveLinks(element);
-        print("Links saved");
+      if(element == "RequestCertificate")  {
 
-        saveCertificate();
-        print("Certificate saved");
+        print("HERE" + _links);
 
-        setState(() {
-          loading = false;
-          success = true;
-        });
+        if(_links == "") {
+          showDialog(context: context, builder: (context) {return Dialog(child: Text("Kein Zertifikat vorhanden"),);});
+          return;
+        }
+        else {
+          String jsonLinks = _links;
+          // add links and expire date
+          Map tmp = jsonDecode(jsonLinks);
 
-        _channel.sink.close();
+          await getMerkleTree();
+          print(_merkleTree);
+          tmp['leafAB'] = _merkleTree['leafAB'];
+          tmp['leafD'] = _merkleTree['leafD'];
+
+          //add birthday
+          tmp['birthday'] = jsonDecode(_json)['birthday'];
+
+          _channel.sink.add(jsonEncode(tmp));
+
+        }
+
       }
 
     });
@@ -207,14 +226,18 @@ class _QrPageState extends State<QrPage> {
 
     //Read the file
     final contents = await file.readAsString();
-    Map jsonData = jsonDecode(contents);
-
-    _firstName = jsonData['firstName'];
-    _lastName = jsonData['lastName'];
-    _birthday = jsonData['birthdate'];
-    _firstName = jsonData['firstName'];
 
     _json = contents;
+  }
+
+  void _loadLinks() async {
+    final file = await _localLinkFile;
+
+    //Read the file
+    final contents = await file.readAsString();
+
+    _links = contents;
+    print("BEFORE" + _links);
   }
 
   //different paths and files
@@ -245,7 +268,6 @@ class _QrPageState extends State<QrPage> {
 
   Future<File> saveLinks(json) async{
 
-    print(json);
     String jsonDataString = json.toString();
 
     final jsonData = jsonDecode(jsonDataString);
@@ -264,5 +286,19 @@ class _QrPageState extends State<QrPage> {
     Map map = {'expireDate': _expire};
     file.writeAsString(jsonEncode(map));
   }
+
+  Future getMerkleTree() async {
+
+    Map result = Map();
+
+    String data = _json;
+    Map jsonData = jsonDecode(data);
+
+    result['leafAB'] = await generateLeafAB(jsonData['hashedImage'], jsonData['firstName'], jsonData['lastName'], jsonData['birthplace']);
+    result['leafD'] = await generatLeafD(jsonData['address'], jsonData['nationality']);
+
+    _merkleTree = result;
+  }
+
 }
 
