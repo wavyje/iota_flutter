@@ -220,10 +220,10 @@ class _CertificateUploadState extends State<CertificateUpload> {
                 TextFormField(decoration: const InputDecoration(
                     labelText: 'Passwort',
                     labelStyle: TextStyle(color: Colors.black),
-                    fillColor: Colors.white,
-                    focusColor: Colors.white
+                    fillColor: Colors.black,
+                    focusColor: Colors.black
                 ),
-                  cursorColor: Colors.white,
+                  cursorColor: Colors.black,
                   controller: controller,
                   // The validator receives the text that the user has entered.
                   validator: (value) {
@@ -299,6 +299,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
     String expire() {
       DateTime rn = DateTime.now();
+      print(rn);
       DateTime expire = rn.add(new Duration(days: 356));
       final df = new DateFormat('dd-MM-yyyy');
       final expireFormat =  df.format(expire);

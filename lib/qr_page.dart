@@ -10,6 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import './Buttons.dart';
 
@@ -29,6 +30,7 @@ class _QrPageState extends State<QrPage> {
   String _links = "";
   String _expire = "";
   Map _merkleTree = Map();
+  String _uuid = "";
 
   String _lastName = "";
   String _firstName = "";
@@ -160,7 +162,7 @@ class _QrPageState extends State<QrPage> {
               if(!loading && !success)
               QrImage(
                 //ws://192.168.0.202:8080/cdab716e-5269-4b86-b770-bba772be4962
-                data: 'UploadCertificate/cdab716e-5269-4b86-b770-bba772be4962',
+                data: 'UploadCertificate/' + _uuid,
                 version: QrVersions.auto,
                 size: 240,
                 gapless: false,
@@ -210,8 +212,12 @@ class _QrPageState extends State<QrPage> {
   }
 
   void _joinServer() {
+    var uuid = Uuid();
+    var u = uuid.v4();
+    _uuid = u;
+    print(_uuid);
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.0.202:8080/cdab716e-5269-4b86-b770-bba772be4962'),
+      Uri.parse('ws://192.168.0.202:8080/' + _uuid),
     );
   }
 
