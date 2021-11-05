@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
-import './Buttons.dart';
-
+// page for displaying the certificate expiriation dates
 class CertificatePage extends StatefulWidget {
   @override
   _CertificatePageState createState() {
@@ -16,7 +14,8 @@ class CertificatePage extends StatefulWidget {
 
 class _CertificatePageState extends State<CertificatePage> {
 
-  String _expire = "";
+  String _expireHealth = "";
+  String _expireRegistration = "";
 
   bool registered = false;
   bool healthCheckUp = false;
@@ -65,7 +64,7 @@ class _CertificatePageState extends State<CertificatePage> {
 
                   Text("Anmeldebescheinigung: ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
                   if(registered)
-                    Text("Gültig bis " + _expire, style: TextStyle(color: Colors.white, fontSize: 18),),
+                    Text("Gültig bis " + _expireRegistration, style: TextStyle(color: Colors.white, fontSize: 18),),
                   if(!registered)
                     Text("Nicht vorhanden"),
 
@@ -74,7 +73,7 @@ class _CertificatePageState extends State<CertificatePage> {
                   ),
                   Text("Gesundheitscheck: ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
                   if(healthCheckUp)
-                    Text("Gültig bis " + _expire, style: TextStyle(color: Colors.white, fontSize: 18),),
+                    Text("Gültig bis " + _expireHealth, style: TextStyle(color: Colors.white, fontSize: 18),),
                   if(!healthCheckUp)
                     Text("Nicht vorhanden")
                     ]
@@ -84,6 +83,7 @@ class _CertificatePageState extends State<CertificatePage> {
     );
   }
 
+  // loads the certificate expiration date
   void _loadCertificate() async {
 
     final path = await _localPath;
@@ -97,9 +97,15 @@ class _CertificatePageState extends State<CertificatePage> {
         final Map<String, dynamic> map = jsonDecode(contents);
 
         setState(() {
-          _expire = map['expireDate'];
-          registered = true;
+          _expireRegistration = map['expireDateRegistration'];
+          _expireHealth = map['expireDateHealth'];
         });
+        if(_expireRegistration != "") {
+          registered = true;
+        }
+        if(_expireHealth != "") {
+          healthCheckUp = true;
+        }
       }
     }
   }

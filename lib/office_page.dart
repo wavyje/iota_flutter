@@ -3,6 +3,7 @@ import 'package:iota_app/Buttons.dart';
 import 'package:http/http.dart' as http;
 
 import './office_scan.dart';
+import './crypto.dart';
 
 class OfficePage extends StatefulWidget {
 
@@ -115,7 +116,7 @@ class _OfficePageState extends State<OfficePage> {
                   });
                 }
               },
-              buttonText: "Passwort eingeben",
+              buttonText: "Login",
                 icon: Icons.forward,
               ),
               if(passwordIncorrect)
@@ -126,14 +127,17 @@ class _OfficePageState extends State<OfficePage> {
                 if(officeLoggedIn) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => OfficeScan()),
+                    MaterialPageRoute(builder: (context) => OfficeScan(key: UniqueKey(), doctorLoggedIn: false,)),
                   );
                 }
                 else if(doctorLoggedIn) {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OfficeScan(key: UniqueKey(), doctorLoggedIn: true)),
+                  );
                 }
                 }, buttonText: "Zertfikat hochladen", icon: Icons.qr_code_2_outlined),
-              Container(padding: EdgeInsets.only(bottom: 300),)
+              Container(padding: EdgeInsets.only(bottom: 400),)
             ],
           ),
         ),
@@ -143,8 +147,12 @@ class _OfficePageState extends State<OfficePage> {
     );
   }
 
-  Future<http.Response> sendPassword(data) {
-    Map json = {'password': data};
+  // checks password for office login
+  Future<http.Response> sendPassword(data) async {
+    print(data);
+    String pw = await generateHash(data);
+    print(pw);
+    Map json = {'password': pw};
     return http.post(
       Uri.parse('http://192.168.0.202:8080/login'),
       headers: <String, String>{

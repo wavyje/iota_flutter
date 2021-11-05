@@ -4,14 +4,13 @@ import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
-import 'package:iota_app/CustomForm.dart';
-import 'package:iota_app/loading_screen.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import './crypto.dart';
 
 
 
 
-
+// page for the office to upload the registration certificate
 class CertificateUpload extends StatefulWidget {
   final String roomId;
   CertificateUpload({required Key key, required this.roomId});
@@ -41,6 +40,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
   _CertificateUploadState({required this.roomId});
 
+  // listens to the websocket stream, only receives the prostitute's data
   @override
   void initState() {
 
@@ -99,10 +99,10 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
             ),
           ),
+          child: SingleChildScrollView(
+
           child: Column(
             children: <Widget>[
-              Text(roomId),
-
               Text("Vorname: " + firstName, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
@@ -149,28 +149,32 @@ class _CertificateUploadState extends State<CertificateUpload> {
                 ),
             ],
           ),
+          ),
         ),
       ),
     );
   }
 
-
+  // join the websocket server with the id transferred by the qr-code
   void _joinServer() {
      _channel = WebSocketChannel.connect(
       Uri.parse('ws://192.168.0.202:8080/' + roomId),
     );
   }
 
+  // requests the prostitute's data
   void _sendRequestData() {
     _channel.sink.add("RequestData");
   }
 
+  // closes the stream
   @override
   void dispose() {
     _channel.sink.close();
     super.dispose();
   }
 
+  // gathers the prostitute's information in a json and sends it via a post request to the server
   Future<http.Response> createAlbum(String password, String firstName, String lastName, String birthday, String birthplace, String nationality, String address, String hashedImage) {
 
     String expireDate = expire();
@@ -195,6 +199,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
     );
   }
 
+  // sends the password so the author instance on the server can be imported
   Future<http.Response> sendPassword(data) {
     Map json = {'password': data};
     return http.post(
@@ -211,7 +216,8 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
       String result = await showDialog(context: context, builder: (BuildContext context) {
 
-          return Dialog(
+        return SingleChildScrollView(
+          child: Dialog(
             backgroundColor: Colors.white,
             elevation: 0,
             child: new Column(
@@ -238,20 +244,20 @@ class _CertificateUploadState extends State<CertificateUpload> {
                       left: 0, top: 10, right: 0, bottom: 0),
                 ),
                 CustomButton(onPressed: () async {
-                          var response = await sendPassword(controller.text);
+                          var response = await sendPassword(await generateHash(controller.text));
 
                           if(response.statusCode == 200) {
                             print(response.body);
 
                             Navigator.of(context).pop("true");
 
-                              response = await createAlbum(controller.text, firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
+                              response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
 
                               if(response.statusCode == 200) {
-                                //print(response.body);
+
                                 Map links = jsonDecode(response.body);
                                 links['expireDate'] = expireDate;
-                                //print(links);
+
                                 var linksjson = jsonEncode(links);
                                 print(linksjson);
                                  _channel.sink.add(linksjson);
@@ -274,7 +280,8 @@ class _CertificateUploadState extends State<CertificateUpload> {
                     icon: Icons.check),
               ],
             ),
-          );
+          )
+        );
       }
       );
 
@@ -297,10 +304,11 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
     }
 
+    // calculates expiration date for the certificate
     String expire() {
       DateTime rn = DateTime.now();
       print(rn);
-      DateTime expire = rn.add(new Duration(days: 356));
+      DateTime expire = rn.add(new Duration(days: 365));
       final df = new DateFormat('dd-MM-yyyy');
       final expireFormat =  df.format(expire);
       expireDate = expireFormat;

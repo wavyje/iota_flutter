@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:url_launcher/url_launcher.dart';
-import './certificate_upload.dart';
 import './check_certificate.dart';
 
+// qr scanner for checking the certificate
 class CustomerScan extends StatefulWidget {
   @override
   _CustomerScanState createState() => _CustomerScanState();

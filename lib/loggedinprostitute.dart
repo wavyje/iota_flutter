@@ -1,15 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import './imagePicker.dart';
 import './Buttons.dart';
 import './profile_page.dart';
 import './qr_page.dart';
-import './loading_screen.dart';
 import './saved_certificates.dart';
 
 class UserMenu extends StatefulWidget {

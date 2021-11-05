@@ -1,16 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iota_app/saved_certificates.dart';
-import './question.dart';
-import './CustomForm.dart';
+import 'package:iota_app/generated/l10n.dart';
 import './DataInput.dart';
-import './scanner.dart';
 import './Buttons.dart';
-import 'dart:io';
-import './loggedinprostitute.dart';
-import './loading_screen.dart';
 import './office_page.dart';
 import './customer_scan.dart';
-import './crypto.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -40,6 +36,17 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', ''),
+        Locale('de', ''),
+      ],
+
       theme: ThemeData(
 
         primaryColor: Colors.deepPurpleAccent,
@@ -91,9 +98,9 @@ class ButtonTest extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
+            margin: EdgeInsets.only(left: 0, right: 0, top: 90, bottom: 0),
           ),
-          Text("Zertifikate überprüfen...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
+          Text(AppLocalizations.of(context)!.checkCertificate, style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
@@ -104,14 +111,14 @@ class ButtonTest extends StatelessWidget {
                 );
               }
               ,
-            buttonText: "Qr code scannen",
+            buttonText: AppLocalizations.of(context)!.scanQR,
             icon: Icons.qr_code_2_outlined,
           ),
           ),
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 50, bottom: 0),
           ),
-          Text("Zertifikate speichern...", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
+          Text(AppLocalizations.of(context)!.saveCertificates, style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1, color: Colors.white),),
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
@@ -119,7 +126,7 @@ class ButtonTest extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => DataInput()),
             );},
-            buttonText: "Anmeldung für Benutzer",
+            buttonText: AppLocalizations.of(context)!.prostituteLogin,
             icon: Icons.account_circle_outlined,
           ),
           ),
@@ -132,12 +139,13 @@ class ButtonTest extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => OfficePage()),
             );},
-            buttonText: "LogIn Behörde/Arzt",
+            buttonText: AppLocalizations.of(context)!.authorityLogin,
             icon: Icons.house_outlined,
           ),
           ),
         ],
       )
+
       );
   }
 }

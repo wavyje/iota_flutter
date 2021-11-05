@@ -1,0 +1,181 @@
+{
+  "address": "Address",
+  "@address": {
+    "description": "address"
+  },
+
+  "addressForm": "Street, Number, Postal Code, City",
+  "@addressForm": {
+    "description": "form of address"
+  },
+
+  "authorityLogin": "Authority Login",
+  "@authorityLogin": {
+    "description": "Button for authority login"
+  },
+
+  "birthday": "Birthday",
+  "@birthday": {
+    "description": "birthday"
+  },
+
+  "birthplace": "Birthplace",
+  "@birthplace": {
+    "description": "birthplace"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "cancel button"
+  },
+
+  "certificates": "Certificates",
+  "@certificates": {
+    "description": "title of certificate page"
+  },
+
+  "certificatesValid": "Certificates are valid!",
+  "@certificatesValid": {
+    "description": "appears when certificates are valid"
+  },
+
+  "certificateSuccess": "Certificate Created Successfully!",
+  "@certificateSuccess": {
+    "description": "when certificate was created successfully"
+  },
+
+  "checkCertificate": "Check Certificate",
+  "@checkCertificate": {
+    "description": "Check the certificates"
+  },
+
+  "chooseImage": "Choose an Image",
+  "@chooseImage": {
+    "description": "choose the profile picture"
+  },
+
+  "createQR": "Create QR Code",
+  "@createQR": {
+    "description": "create QR Code"
+  },
+
+  "deleteDataButton": "Change or Delete Data",
+  "@deleteDataButton": {
+    "description": "Button for changing or deleting data"
+  },
+
+  "expirationDate": "Expiration Date: ",
+  "@expirationDate": {
+    "description": "when the certificate expires"
+  },
+
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "first name"
+  },
+
+  "healthCertificate": "Health Certificate",
+  "@healthCertificate": {
+    "description": "certificate of health check up"
+  },
+
+  "healthCertificateNotFound": "Health Certificate could not be found",
+  "@healthCertificateNotFound": {
+    "description": "shows when health certificate could not be found"
+  },
+
+  "healthCertificateUpload": "Registration Certificate valid until ",
+  "@healthCertificateUpload": {
+    "description": "shows on the health certificate upload page"
+  },
+
+  "imageInformation": "The image must show the face clearly",
+  "@imageInformation": {
+    "description": "information of image content"
+  },
+
+  "imageSuccess": "Image saved successfully",
+  "@imageSuccess": {
+    "description": "when image uploaded successfully"
+  },
+
+  "imageWarning": "A picture must be uploaded",
+  "@imageWarning": {
+    "description": "informs of obligatory picture upload"
+  },
+
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "last name"
+  },
+
+  "nationality": "Nationality",
+  "@nationality": {
+    "description": "nationality"
+  },
+
+  "notExisting": "Not Existing",
+  "@notExisting": {
+    "description": "when certificate not existing"
+  },
+
+  "obligatoryField": "Obligatory",
+  "@obligatoryField": {
+    "description": "Appears when obligatory field was not filled"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "password"
+  },
+
+  "passwordIncorrect": "Password Incorrect",
+  "@passwordIncorrect": {
+    "description": "password incorrect"
+  },
+
+  "personalData": "Personal Data",
+  "@personalData": {
+    "description": "personal data"
+  },
+
+  "prostituteLogin": "Registration",
+  "@prostituteLogin": {
+    "description": "Button for prostitute login"
+  },
+
+  "registrationCertificate": "Registration Certificate",
+  "@registrationCertificate": {
+    "description": "certificate of registering"
+  },
+
+  "registrationCertificateNotFound": "Registration Certificate could not be found",
+  "@registrationCertificateNotFound": {
+    "description": "shows when registration could not be found"
+  },
+
+  "registrationPage": "Registration",
+  "@registrationPage": {
+    "description": "title of registration page"
+  },
+
+  "saveCertificates": "For Prostitutes",
+  "@saveCertificates": {
+    "description": "certificates can be saved"
+  },
+
+  "scanQR": "Scan QR Code",
+  "@scanQR": {
+    "description": "Button for QR scanning (customer)"
+  },
+
+  "searchingNetwork": "Searching the Tangle, please wait",
+  "@searchingNetwork": {
+    "description": "appears while checking the certificates"
+  },
+
+  "uploadCertificate": "Upload Certificate",
+  "@uploadCertificate": {
+    "description": "upload Certificate"
+  }
+}

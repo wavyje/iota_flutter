@@ -28,7 +28,8 @@ class _QrPageState extends State<QrPage> {
   String _imagePath = "";
   String _json = "";
   String _links = "";
-  String _expire = "";
+  String _expireDateRegistration = "";
+  String _expireDateHealth = "";
   Map _merkleTree = Map();
   String _uuid = "";
 
@@ -66,7 +67,6 @@ class _QrPageState extends State<QrPage> {
       }
 
       if(element.contains("appInst") && !element.contains("leafAB")) {
-        if(!File('$_localPath/certificate.txt').existsSync()) {
           print(element);
           saveLinks(element);
           print("Links saved");
@@ -80,7 +80,7 @@ class _QrPageState extends State<QrPage> {
           });
 
           _channel.sink.close();
-        }
+
       }
       if(element == "RequestCertificate")  {
 
@@ -92,7 +92,7 @@ class _QrPageState extends State<QrPage> {
         }
         else {
           String jsonLinks = _links;
-          // add links and expire date
+          // add links, expire date is included
           Map tmp = jsonDecode(jsonLinks);
 
           await getMerkleTree();
@@ -103,9 +103,49 @@ class _QrPageState extends State<QrPage> {
           //add birthday
           tmp['birthday'] = jsonDecode(_json)['birthday'];
 
+          //add health expire date
+          final file = await _localCertificateFile;
+          String fStr = await file.readAsString();
+          Map fMap = jsonDecode(fStr);
+          tmp['expireHealth'] = fMap['expireDateHealth'];
+
           _channel.sink.add(jsonEncode(tmp));
 
         }
+
+      }
+
+      if(element.contains("health_certificate")) {
+          print("health");
+          setState(() {
+            _expireDateHealth = jsonDecode(element)['expireDate'];
+          });
+
+
+          //save the certificate
+          File exp = await _localCertificateFile;
+          print(exp);
+          String expString = await exp.readAsString();
+          Map expMap = jsonDecode(expString);
+          print(expMap);
+          expMap['expireDateHealth'] = _expireDateHealth;
+          print(expMap);
+          exp.writeAsString(jsonEncode(expMap));
+
+          //save the tagged message link
+          File links = await _localLinkFile;
+          String linksString = await links.readAsString();
+          Map linksMap = jsonDecode(linksString);
+          linksMap['TaggedMsgId'] = jsonDecode(element)['TaggedMsgId'];
+          print(linksMap);
+          links.writeAsString(jsonEncode(linksMap));
+
+          setState(() {
+            loading = false;
+            success = true;
+          });
+
+          _channel.sink.close();
 
       }
 
@@ -217,7 +257,7 @@ class _QrPageState extends State<QrPage> {
     _uuid = u;
     print(_uuid);
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.0.202:8080/' + _uuid),
+      Uri.parse('ws://134.106.186.38:80/' + _uuid),
     );
   }
 
@@ -277,7 +317,8 @@ class _QrPageState extends State<QrPage> {
     String jsonDataString = json.toString();
 
     final jsonData = jsonDecode(jsonDataString);
-    _expire = jsonData['expireDate'];
+    _expireDateRegistration = jsonData['expireDate'];
+    jsonData['TaggedMsgId'] = "";
 
     final file = await _localLinkFile;
 
@@ -289,7 +330,8 @@ class _QrPageState extends State<QrPage> {
   Future saveCertificate() async {
     final file = await _localCertificateFile;
 
-    Map map = {'expireDate': _expire};
+    Map map = {'expireDateRegistration': _expireDateRegistration,
+              'expireDateHealth': _expireDateHealth};
     file.writeAsString(jsonEncode(map));
   }
 

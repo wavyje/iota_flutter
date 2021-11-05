@@ -5,13 +5,13 @@ import 'package:iota_app/imagePicker.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import './loggedinprostitute.dart';
 import './imagePicker.dart';
 import './Buttons.dart';
 import './crypto.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class MyCustomForm extends StatefulWidget {
@@ -47,7 +47,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         children: <Widget>[
           TextFormField(decoration: const InputDecoration(
             icon: Icon(Icons.person, color: Colors.white,),
-            labelText: 'Vorname', labelStyle: TextStyle(color: Colors.white),
+            labelText: "AppLocalizations.of(context)!.firstName", labelStyle: TextStyle(color: Colors.white),
             fillColor: Colors.white,
             focusColor: Colors.white
           ),
@@ -159,6 +159,8 @@ class MyCustomFormState extends State<MyCustomForm> {
           Text("Gesicht muss eindeutig identifizierbar sein", style: TextStyle(color: Colors.white),),
           if(!image)
             Text("Ein Bild muss hochgeladen werden", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+          if(image)
+            Text("Bild erfolgreich ausgewählt!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
           ),
@@ -199,6 +201,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
+// creates album of data and sends http request to server
 Future<http.Response> createAlbum(String name, String address, String birthday, String birthplace) {
   Map json = {'name': name,
               'address': address,
@@ -215,6 +218,7 @@ Future<http.Response> createAlbum(String name, String address, String birthday, 
   );
 }
 
+// saves data locally
 Future<File> saveData(String firstName, String lastName, String birthday, String birthplace, String nationality, String address, String hashedImage) async{
   Map json = {'firstName': firstName,
               'lastName': lastName,
@@ -234,6 +238,7 @@ Future<File> saveData(String firstName, String lastName, String birthday, String
   return file.writeAsString(jsonEncode(json));
 }
 
+// reads the saved data
 Future<String> readData() async {
   try {
     final file = await _localFile;
@@ -249,6 +254,7 @@ Future<String> readData() async {
   }
 }
 
+// local path for files
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
   print(directory.path);
