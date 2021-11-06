@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
 import 'package:http/http.dart' as http;
+import 'package:iota_app/generated/l10n.dart';
 
 import './office_scan.dart';
 import './crypto.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OfficePage extends StatefulWidget {
 
@@ -70,8 +72,8 @@ class _OfficePageState extends State<OfficePage> {
             children: <Widget>[
               Container(padding: EdgeInsets.all(100),),
               if(!loggedin)
-               TextFormField(decoration: const InputDecoration(
-              labelText: 'Passwort',
+               TextFormField(decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.password,
                   labelStyle: TextStyle(color: Colors.black),
                   fillColor: Colors.white,
                   focusColor: Colors.white
@@ -120,7 +122,7 @@ class _OfficePageState extends State<OfficePage> {
                 icon: Icons.forward,
               ),
               if(passwordIncorrect)
-                Text("Passwort falsch"),
+                Text(AppLocalizations.of(context)!.passwordIncorrect),
 
               if(loggedin)
               CustomButton(onPressed: () {
@@ -136,7 +138,7 @@ class _OfficePageState extends State<OfficePage> {
                     MaterialPageRoute(builder: (context) => OfficeScan(key: UniqueKey(), doctorLoggedIn: true)),
                   );
                 }
-                }, buttonText: "Zertfikat hochladen", icon: Icons.qr_code_2_outlined),
+                }, buttonText: AppLocalizations.of(context)!.uploadCertificate, icon: Icons.qr_code_2_outlined),
               Container(padding: EdgeInsets.only(bottom: 400),)
             ],
           ),

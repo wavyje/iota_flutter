@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 
 
@@ -117,7 +119,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Zertifikate',
+          title: Text(AppLocalizations.of(context)!.certificates,
             style: TextStyle(color: Colors.white, letterSpacing: 5),
           ),
           centerTitle: true,
@@ -139,38 +141,38 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
           child: SingleChildScrollView(
             child: Column(
             children: <Widget>[
-              Text("Vorname: " + firstName, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.firstName + ": " + firstName, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Nachname: " + lastName, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.lastName + ": " + lastName, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Geburtstag: " + birthday, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.birthday + ": " + birthday, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Geburtsort: " + birthplace, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.birthplace + ": " + birthplace, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Staatsangehörigkeit: " + nationality, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.nationality + ": " + nationality, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Addresse: " + address, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.address + ": " + address, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
               if(dataArrived && !success && registrationValid)
                 CustomButton(onPressed: () { getResponse(); },
-                    buttonText: "Zertifikat hochladen", icon: Icons.check),
+                    buttonText: AppLocalizations.of(context)!.uploadCertificate, icon: Icons.check),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
               if(registrationValid)
-                Text("Anmeldebescheinigung ist gültig bis " + expireDate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                Text(AppLocalizations.of(context)!.healthCertificateUpload + expireDate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               if(loading)
                 CircleAvatar(backgroundImage: Image
                     .asset('assets/images/IOTA_Spawn.gif')
@@ -259,8 +261,8 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(decoration: const InputDecoration(
-                labelText: 'Passwort',
+            TextFormField(decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.password,
                 labelStyle: TextStyle(color: Colors.black),
                 fillColor: Colors.black,
                 focusColor: Colors.black
@@ -312,7 +314,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
               }
 
             },
-                buttonText: "Mit Passwort bestätigen",
+                buttonText: "Confirm with Password",
                 icon: Icons.check),
           ],
         ),

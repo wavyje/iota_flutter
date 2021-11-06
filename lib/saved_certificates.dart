@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // page for displaying the certificate expiriation dates
 class CertificatePage extends StatefulWidget {
   @override
@@ -48,7 +50,7 @@ class _CertificatePageState extends State<CertificatePage> {
         ),
         child: Column(
             children: <Widget>[
-              AppBar(title: Text("Zertifikate",
+              AppBar(title: Text(AppLocalizations.of(context)!.certificates,
                 style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 5,
@@ -62,20 +64,20 @@ class _CertificatePageState extends State<CertificatePage> {
                 margin: EdgeInsets.only(left:0, top:100, right:0, bottom:0),
               ),
 
-                  Text("Anmeldebescheinigung: ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
+                  Text(AppLocalizations.of(context)!.registrationCertificate + ": ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
                   if(registered)
-                    Text("Gültig bis " + _expireRegistration, style: TextStyle(color: Colors.white, fontSize: 18),),
+                    Text(AppLocalizations.of(context)!.expirationDate + " " + _expireRegistration, style: TextStyle(color: Colors.white, fontSize: 18),),
                   if(!registered)
-                    Text("Nicht vorhanden"),
+                    Text(AppLocalizations.of(context)!.notExisting),
 
                   Container(
                     margin: EdgeInsets.only(left:0, top:100, right:0, bottom:0),
                   ),
-                  Text("Gesundheitscheck: ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
+                  Text(AppLocalizations.of(context)!.healthCertificate + ": ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18, letterSpacing: 1),),
                   if(healthCheckUp)
-                    Text("Gültig bis " + _expireHealth, style: TextStyle(color: Colors.white, fontSize: 18),),
+                    Text(AppLocalizations.of(context)!.expirationDate + ": " + _expireHealth, style: TextStyle(color: Colors.white, fontSize: 18),),
                   if(!healthCheckUp)
-                    Text("Nicht vorhanden")
+                    Text(AppLocalizations.of(context)!.notExisting)
                     ]
                 ),
 

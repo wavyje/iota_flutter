@@ -45,9 +45,9 @@ class MyCustomFormState extends State<MyCustomForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
             icon: Icon(Icons.person, color: Colors.white,),
-            labelText: "AppLocalizations.of(context)!.firstName", labelStyle: TextStyle(color: Colors.white),
+            labelText: AppLocalizations.of(context)!.firstName, labelStyle: TextStyle(color: Colors.white),
             fillColor: Colors.white,
             focusColor: Colors.white
           ),
@@ -56,14 +56,14 @@ class MyCustomFormState extends State<MyCustomForm> {
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
           ),
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
             icon: Icon(Icons.home),
-            labelText: 'Nachname', labelStyle: TextStyle(color: Colors.white),
+            labelText: AppLocalizations.of(context)!.lastName, labelStyle: TextStyle(color: Colors.white),
             fillColor: Colors.white,
             focusColor: Colors.white
           ),
@@ -72,14 +72,14 @@ class MyCustomFormState extends State<MyCustomForm> {
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
           ),
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
             icon: Icon(Icons.calendar_today),
-            labelText: 'Geburtstag',labelStyle: TextStyle(color: Colors.white),
+            labelText: AppLocalizations.of(context)!.birthday,labelStyle: TextStyle(color: Colors.white),
               fillColor: Colors.white,
               focusColor: Colors.white,
             hintText: "dd-mm-yyyy"
@@ -92,14 +92,14 @@ class MyCustomFormState extends State<MyCustomForm> {
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
           ),
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
             icon: Icon(Icons.local_hospital),
-            labelText: 'Geburtsort',labelStyle: TextStyle(color: Colors.white),
+            labelText: AppLocalizations.of(context)!.birthplace,labelStyle: TextStyle(color: Colors.white),
               fillColor: Colors.white,
               focusColor: Colors.white
           ),
@@ -108,14 +108,14 @@ class MyCustomFormState extends State<MyCustomForm> {
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
           ),
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
               icon: Icon(Icons.flag_outlined),
-              labelText: 'Staatsangehörigkeit',labelStyle: TextStyle(color: Colors.white),
+              labelText: AppLocalizations.of(context)!.nationality,labelStyle: TextStyle(color: Colors.white),
               fillColor: Colors.white,
               focusColor: Colors.white
           ),
@@ -124,24 +124,24 @@ class MyCustomFormState extends State<MyCustomForm> {
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
           ),
-          TextFormField(decoration: const InputDecoration(
+          TextFormField(decoration: InputDecoration(
             icon: Icon(Icons.calendar_today),
-            labelText: 'Addresse',labelStyle: TextStyle(color: Colors.white),
+            labelText: AppLocalizations.of(context)!.address,labelStyle: TextStyle(color: Colors.white),
               fillColor: Colors.white,
               focusColor: Colors.white,
-            hintText: "Straße Hausnummer, PLZ Wohnort"
+            hintText: AppLocalizations.of(context)!.addressForm
           ),
             cursorColor: Colors.white,
             controller: address,
             // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Pflichtfeld';
+                return AppLocalizations.of(context)!.obligatoryField;
               }
               return null;
             },
@@ -153,14 +153,14 @@ class MyCustomFormState extends State<MyCustomForm> {
             onPressed: () {
               getImage(ImageSource.gallery).then((value) => image = value);
             },
-            buttonText: "Bild auswählen",
+            buttonText: AppLocalizations.of(context)!.chooseImage,
             icon: Icons.image
           ),
-          Text("Gesicht muss eindeutig identifizierbar sein", style: TextStyle(color: Colors.white),),
+          Text(AppLocalizations.of(context)!.imageInformation, style: TextStyle(color: Colors.white),),
           if(!image)
-            Text("Ein Bild muss hochgeladen werden", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            Text(AppLocalizations.of(context)!.imageWarning, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           if(image)
-            Text("Bild erfolgreich ausgewählt!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            Text(AppLocalizations.of(context)!.imageSuccess, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           Container(
             margin: EdgeInsets.only(left: 0, right: 0, top: 150, bottom: 0),
           ),
@@ -180,7 +180,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 );
               }
             },
-            buttonText: "Registrieren",
+            buttonText: AppLocalizations.of(context)!.registrationPage,
             icon: Icons.check,
           ),
           ElevatedButton(

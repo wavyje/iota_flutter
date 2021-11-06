@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import './check_certificate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // qr scanner for checking the certificate
 class CustomerScan extends StatefulWidget {
@@ -23,7 +24,7 @@ class _CustomerScanState extends State<CustomerScan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Qr Code scannen"),
+        title: Text(AppLocalizations.of(context)!.scanQR),
       ),
       body: QRView(
         key: qrKey,

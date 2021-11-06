@@ -7,6 +7,7 @@ import './Buttons.dart';
 import './profile_page.dart';
 import './qr_page.dart';
 import './saved_certificates.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserMenu extends StatefulWidget {
   @override
@@ -72,13 +73,13 @@ class _UserMenuState extends State<UserMenu> {
             context,
             MaterialPageRoute(builder: (context) => ProfilePage()),
           );},
-              buttonText: "Persönliche Daten", icon: Icons.account_circle_outlined),
+              buttonText: AppLocalizations.of(context)!.personalData, icon: Icons.account_circle_outlined),
           ),
           Container(
             margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
           ),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 195),
-            child: CustomButton(onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => CertificatePage())); }, buttonText: "Zertifikate", icon: Icons.badge_outlined),
+            child: CustomButton(onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => CertificatePage())); }, buttonText: AppLocalizations.of(context)!.certificates, icon: Icons.badge_outlined),
           ),
           Container(
             margin: EdgeInsets.only(left:0, top:100, right:0, bottom:0),
@@ -88,7 +89,7 @@ class _UserMenuState extends State<UserMenu> {
               context,
               MaterialPageRoute(builder: (context) => QrPage()),
               );},
-              buttonText: "Qr Code erstellen", icon: Icons.qr_code_2_outlined),
+              buttonText: AppLocalizations.of(context)!.createQR, icon: Icons.qr_code_2_outlined),
     ),
 
     ],

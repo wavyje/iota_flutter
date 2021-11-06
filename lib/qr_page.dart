@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iota_app/crypto.dart';
+import 'package:iota_app/generated/l10n.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import './Buttons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QrPage extends StatefulWidget {
   @override
@@ -222,14 +224,14 @@ class _QrPageState extends State<QrPage> {
                   backgroundColor: Colors.transparent,
                 ),
               if(!loading && success)
-                Text("Zertifikat erfolgreich erstellt!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                Text(AppLocalizations.of(context)!.certificateSuccess, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               Container(
                 margin: EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 0),
               ),
               if(!success)
               CustomButton(onPressed: () { Navigator.pop(context,);
               },
-                  buttonText: "Abbrechen",
+                  buttonText: AppLocalizations.of(context)!.cancel,
                   icon: Icons.cancel),
               if(success)
                 CustomButton(onPressed: () { Navigator.pop(context,);

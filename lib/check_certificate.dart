@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 
@@ -121,7 +122,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Zertifikate',
+          title: Text(AppLocalizations.of(context)!.certificates,
             style: TextStyle(color: Colors.white, letterSpacing: 5),
           ),
           centerTitle: true,
@@ -145,7 +146,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              Text("Geburtstag: " + birthdate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              Text(AppLocalizations.of(context)!.birthday + ": " + birthdate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
@@ -154,11 +155,11 @@ class _CertificateCheckState extends State<CertificateCheck> {
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
               if(!registrationSuccess || !healthCertificateSuccess)
-              Text("Netzwerk wird durchsucht, bitte warten..."),
+              Text(AppLocalizations.of(context)!.searchingNetwork),
               Row(
                 children: [
                   Container(margin: EdgeInsets.only(left: 20, top: 30, right: 0, bottom: 0),),
-                  Text("Anmeldebescheinigung:    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                  Text(AppLocalizations.of(context)!.registrationCertificate + ":    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                   if(registrationLoading)
                     CircleAvatar(backgroundImage: Image
                         .asset('assets/images/IOTA_Spawn.gif')
@@ -176,12 +177,12 @@ class _CertificateCheckState extends State<CertificateCheck> {
                 ],
               ),
               if(registrationSuccess)
-              Text("Gültig bis: " + expireRegistration, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.expirationDate + ": " + expireRegistration, style: TextStyle(color: Colors.white),),
               Container(margin: EdgeInsets.only(top: 20),),
               Row(
                 children: [
                   Container(margin: EdgeInsets.only(left: 20, top: 20, right: 0, bottom: 0),),
-                  Text("Gesundheitszertifikat:    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                  Text(AppLocalizations.of(context)!.healthCertificate + ":    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                   if(healthCertificateLoading)
                     CircleAvatar(backgroundImage: Image
                         .asset('assets/images/IOTA_Spawn.gif')
@@ -199,16 +200,16 @@ class _CertificateCheckState extends State<CertificateCheck> {
                 ],
               ),
               if(healthCertificateSuccess)
-              Text("Gültig bis: " + expireHealth, style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.expirationDate + ": " + expireHealth, style: TextStyle(color: Colors.white),),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
               if(registrationSuccess && healthCertificateSuccess)
-              Text("Zertifikate gültig!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
+              Text(AppLocalizations.of(context)!.certificatesValid, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
               if(registrationNotValid)
-                Text("Anmeldebescheinigung konnte nicht gefunden werden"),
+                Text(AppLocalizations.of(context)!.registrationCertificateNotFound),
               if(healthCertificateNotValid)
-                Text("Gesundheitszertifikat konnte nicht gefunden werden"),
+                Text(AppLocalizations.of(context)!.healthCertificateNotFound),
             ],
           ),
         ),

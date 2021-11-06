@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iota_app/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
 import './Buttons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -79,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Vorname",
+              child: Text(AppLocalizations.of(context)!.firstName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -87,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ),
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Nachname",
+              child: Text(AppLocalizations.of(context)!.lastName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -95,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ),
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Geburtstag",
+              child: Text(AppLocalizations.of(context)!.birthday,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -103,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ),
               Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-              child: Text("Geburtsort",
+              child: Text(AppLocalizations.of(context)!.birthplace,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
@@ -111,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ),
                   Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
-                    child: Text("Wohnort",
+                    child: Text(AppLocalizations.of(context)!.address,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2,
@@ -153,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             margin: EdgeInsets.only(left:0, top:80, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () { }, buttonText: "Profil bearbeiten/löschen", icon: Icons.edit)
+          CustomButton(onPressed: () { }, buttonText: AppLocalizations.of(context)!.deleteDataButton, icon: Icons.edit)
             ]
 
     ),
