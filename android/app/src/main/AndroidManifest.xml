@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.iota_app">
    <application
-        android:label="iota_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="IOTA HEALTH"
+        android:icon="@mipmap/iota_health_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
