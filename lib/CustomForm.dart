@@ -151,7 +151,10 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
           CustomButton(
             onPressed: () {
-              getImage(ImageSource.gallery).then((value) => image = value);
+              getImage(ImageSource.gallery).then((value) => setState(() {
+                image = true;
+              }));
+
             },
             buttonText: AppLocalizations.of(context)!.chooseImage,
             icon: Icons.image
@@ -168,7 +171,16 @@ class MyCustomFormState extends State<MyCustomForm> {
             onPressed: () async {
               //generate hash of image
                 final img = await _imageFile;
-                String hashedImage = await generateImageHash(img);
+                String hashedImage = "";
+                try {
+                  hashedImage = await generateImageHash(img);
+                }
+                catch (error) {
+                  setState(() {
+                    image = false;
+                  });
+                  return;
+                }
               // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate() ) {
                 ScaffoldMessenger.of(context)
@@ -194,7 +206,6 @@ class MyCustomFormState extends State<MyCustomForm> {
             child: Text('Skip to Profile: Debug'),
           ),
 
-          // Add TextFormFields and ElevatedButton here.
         ],
       ),
     );

@@ -156,7 +156,7 @@ class _OfficePageState extends State<OfficePage> {
     print(pw);
     Map json = {'password': pw};
     return http.post(
-      Uri.parse('http://192.168.0.202:8080/login'),
+      Uri.parse('http://134.106.186.38:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },

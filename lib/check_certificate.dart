@@ -220,7 +220,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
   // joins the websocket
   void _joinServer() {
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.0.202:8080/' + roomId),
+      Uri.parse('ws://134.106.186.38:8080/' + roomId),
     );
   }
 
@@ -262,7 +262,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
     print(json);
     return http.post(
 
-      Uri.parse('http://192.168.0.202:8080/CheckCertificate'),
+      Uri.parse('http://134.106.186.38:8080/CheckCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -296,7 +296,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
     print(json);
     return http.post(
 
-      Uri.parse('http://192.168.0.202:8080/CheckHealthCertificate'),
+      Uri.parse('http://134.106.186.38:8080/CheckHealthCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },

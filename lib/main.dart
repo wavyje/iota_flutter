@@ -79,6 +79,8 @@ class _MyAppState extends State<MyApp> {
           ),
         child: Column(
           children: <Widget>[
+            Text("Pre-Alpha developed by Jendrik Mann", style: TextStyle(color: Colors.white),),
+            Text("jendrik.mann@uni-oldenburg.de", style: TextStyle(color: Colors.white),),
 
             ButtonTest(),
 

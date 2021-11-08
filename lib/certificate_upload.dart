@@ -159,7 +159,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
   // join the websocket server with the id transferred by the qr-code
   void _joinServer() {
      _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.0.202:8080/' + roomId),
+      Uri.parse('ws://134.106.186.38:8080/' + roomId),
     );
   }
 
@@ -192,7 +192,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
     print(json);
     return http.post(
 
-      Uri.parse('http://192.168.0.202:8080/certificate'),
+      Uri.parse('http://134.106.186.38:8080/certificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -204,7 +204,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
   Future<http.Response> sendPassword(data) {
     Map json = {'password': data};
     return http.post(
-      Uri.parse('http://192.168.0.202:8080/login'),
+      Uri.parse('http://134.106.186.38:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },

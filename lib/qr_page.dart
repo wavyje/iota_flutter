@@ -259,7 +259,7 @@ class _QrPageState extends State<QrPage> {
     _uuid = u;
     print(_uuid);
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://134.106.186.38:80/' + _uuid),
+      Uri.parse('ws://134.106.186.38:8080/' + _uuid),
     );
   }
 

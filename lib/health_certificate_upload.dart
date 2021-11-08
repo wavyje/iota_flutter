@@ -198,7 +198,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
 
   void _joinServer() {
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.0.202:8080/' + roomId),
+      Uri.parse('ws://134.106.186.38:8080/' + roomId),
     );
   }
 
@@ -231,7 +231,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
     print(json);
     return http.post(
 
-      Uri.parse('http://192.168.0.202:8080/healthCertificate'),
+      Uri.parse('http://134.106.186.38:8080/healthCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -242,7 +242,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   Future<http.Response> sendPassword(data) {
     Map json = {'password': data};
     return http.post(
-      Uri.parse('http://192.168.0.202:8080/login'),
+      Uri.parse('http://134.106.186.38:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -376,7 +376,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
     print(json);
     return http.post(
 
-      Uri.parse('http://192.168.0.202:8080/CheckCertificate'),
+      Uri.parse('http://134.106.186.38:8080/CheckCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
