@@ -15,6 +15,7 @@ import 'package:uuid/uuid.dart';
 
 import './Buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'websocket_connection.dart';
 
 class QrPage extends StatefulWidget {
   @override
@@ -258,8 +259,9 @@ class _QrPageState extends State<QrPage> {
     var u = uuid.v4();
     _uuid = u;
     print(_uuid);
+    var ipAddress = WebsocketConnection().ipAddress;
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://134.106.186.38:8080/' + _uuid),
+      Uri.parse(ipAddress + _uuid),
     );
   }
 
