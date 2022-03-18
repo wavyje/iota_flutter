@@ -39,6 +39,16 @@ class _DoctorPageState
 
   final String lanr;
 
+  AppBar appBar = AppBar(
+    title: Text('IOTA HEALTH',
+      style: TextStyle(
+        color: Colors.white,
+        letterSpacing: 5,
+      ),
+    ),
+    centerTitle: true,
+  );
+
 
   @override
   Widget build(
@@ -50,18 +60,12 @@ class _DoctorPageState
     ),
 
     home: Scaffold(
-    appBar: AppBar(
-    title: Text('IOTA HEALTH',
-    style: TextStyle(
-    color: Colors.white,
-    letterSpacing: 5,
-    ),
-    ),
-    centerTitle: true,
-    ),
-    body: new ListView(
+    appBar: appBar,
+    body: SingleChildScrollView(
 
-    children: <Widget>[Container(
+    child: Container(
+      width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top,
     alignment: Alignment.center,
     decoration: BoxDecoration(
     gradient: LinearGradient(
@@ -92,10 +96,77 @@ class _DoctorPageState
     buttonText: AppLocalizations.of(context)!.uploadCertificate,
     icon: Icons.qr_code_2_outlined,
     ),
+      Container(padding: EdgeInsets.all(20),),
+      CustomButton(onPressed: () async {
+
+        await showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(content: Stack(
+              clipBehavior: Clip
+                  .antiAlias,
+              children: <
+                  Widget>[
+                Positioned(
+                  right: -40.0,
+                  top: -40.0,
+                  child: InkResponse(
+                    onTap: () {
+                      Navigator
+                          .of(
+                          context)
+                          .pop();
+                    },
+                    child: CircleAvatar(
+                      child: Icon(
+                          Icons
+                              .close),
+                      backgroundColor: Colors
+                          .red,
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
+                    Text("Do you really want to delete your profile?"),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(onPressed: () async {
+
+                          var response = await sendRemoveRequest(lanr);
+
+                          if(response.statusCode == 200) {
+                            Navigator.pop(
+                                context);
+                          }
+
+                        }, buttonText: "Confirm", icon: Icons.check),
+                        Container(padding: EdgeInsets.all(10),),
+                        CustomButton(onPressed: () {
+                          Navigator.pop(context);
+                        }, buttonText: "Cancel", icon: Icons.cancel),
+                      ],
+                    )
+
+                  ],
+                )
+
+
+              ]
+          ));
+        });
+
+      },
+        buttonText: "Remove Profile",
+        icon: Icons.account_circle_outlined,
+      ),
 
 
     ],
-    ))]
+    )
+    )
     )
     ,
     )
@@ -133,6 +204,22 @@ Future<http
   return http.post(
     Uri.parse(
         WebsocketConnection().httpAddress + 'put_blacklist'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: json,
+  );
+}
+
+// puts doctor on blacklist
+Future<http
+    .Response> sendRemoveRequest(lanr) async {
+
+
+  Map json = {'lanr': lanr};
+  return http.post(
+    Uri.parse(
+        WebsocketConnection().httpAddress + 'remove_doctor'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded',
     },

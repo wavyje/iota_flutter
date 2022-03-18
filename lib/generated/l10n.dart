@@ -170,12 +170,12 @@ class S {
     );
   }
 
-  /// `Change or Delete Data`
+  /// `Delete Data`
   String get deleteDataButton {
     return Intl.message(
-      'Change or Delete Data',
+      'Delete Data',
       name: 'deleteDataButton',
-      desc: 'Button for changing or deleting data',
+      desc: 'Button for deleting data',
       args: [],
     );
   }
@@ -240,20 +240,20 @@ class S {
     );
   }
 
-  /// `Image saved successfully`
+  /// `Image saved successfully!`
   String get imageSuccess {
     return Intl.message(
-      'Image saved successfully',
+      'Image saved successfully!',
       name: 'imageSuccess',
       desc: 'when image uploaded successfully',
       args: [],
     );
   }
 
-  /// `A picture must be uploaded`
+  /// `A picture must be uploaded!`
   String get imageWarning {
     return Intl.message(
-      'A picture must be uploaded',
+      'A picture must be uploaded!',
       name: 'imageWarning',
       desc: 'informs of obligatory picture upload',
       args: [],

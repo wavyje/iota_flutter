@@ -64,9 +64,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
         });
 
         _channel.sink.add("Empfangen");
-        setState(() {
-          loading = true;
-        });
+
       }
     });
 
@@ -248,6 +246,11 @@ class _CertificateUploadState extends State<CertificateUpload> {
                       left: 0, top: 10, right: 0, bottom: 0),
                 ),
                 CustomButton(onPressed: () async {
+
+                          setState(() {
+                            loading = true;
+                          });
+
                           var response = await sendPassword(await generateHash(controller.text));
 
                           if(response.statusCode == 200) {
@@ -255,17 +258,21 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
                             Navigator.of(context).pop("true");
 
-                              response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
+                              var responseCert = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
 
-                              if(response.statusCode == 200) {
+                              if(responseCert.statusCode == 200) {
 
-                                Map links = jsonDecode(response.body);
+                                Map links = jsonDecode(responseCert.body);
                                 links['expireDate'] = expireDate;
 
                                 var linksjson = jsonEncode(links);
                                 print(linksjson);
                                  _channel.sink.add(linksjson);
                                  _channel.sink.close();
+
+                                 setState(() {
+                                   success = true;
+                                 });
 
                               }
                               else {

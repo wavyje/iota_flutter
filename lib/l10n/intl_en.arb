@@ -59,9 +59,9 @@
     "description": "create QR Code"
   },
 
-  "deleteDataButton": "Change or Delete Data",
+  "deleteDataButton": "Delete Data",
   "@deleteDataButton": {
-    "description": "Button for changing or deleting data"
+    "description": "Button for deleting data"
   },
 
   "expirationDate": "Expiration Date: ",
@@ -94,12 +94,12 @@
     "description": "information of image content"
   },
 
-  "imageSuccess": "Image saved successfully",
+  "imageSuccess": "Image saved successfully!",
   "@imageSuccess": {
     "description": "when image uploaded successfully"
   },
 
-  "imageWarning": "A picture must be uploaded",
+  "imageWarning": "A picture must be uploaded!",
   "@imageWarning": {
     "description": "informs of obligatory picture upload"
   },

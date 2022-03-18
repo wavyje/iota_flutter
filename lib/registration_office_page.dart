@@ -35,6 +35,16 @@ class _RegistrationOfficePageState
 
   TextEditingController lanr = TextEditingController();
 
+  AppBar appBar = AppBar(
+      title: Text('IOTA HEALTH',
+        style: TextStyle(
+          color: Colors.white,
+          letterSpacing: 5,
+        ),
+      ),
+      centerTitle: true,
+    );
+
 
   @override
   Widget build(
@@ -46,18 +56,12 @@ class _RegistrationOfficePageState
     ),
 
     home: Scaffold(
-    appBar: AppBar(
-    title: Text('IOTA HEALTH',
-    style: TextStyle(
-    color: Colors.white,
-    letterSpacing: 5,
-    ),
-    ),
-    centerTitle: true,
-    ),
-    body: new ListView(
+    appBar: appBar,
+    body: SingleChildScrollView(
 
-    children: <Widget>[Container(
+    child: Container(
+     height: MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top,
+
     alignment: Alignment.center,
     decoration: BoxDecoration(
     gradient: LinearGradient(
@@ -72,6 +76,7 @@ class _RegistrationOfficePageState
     ),
     ),
     child: Column(
+
     children: <Widget>[
     Container(padding: EdgeInsets.all(100),),
 
@@ -89,6 +94,7 @@ class _RegistrationOfficePageState
     icon: Icons.qr_code_2_outlined,
     ),
 
+    Container(padding: EdgeInsets.all(20),),
     //button for blacklisting a doctor
     CustomButton(
     buttonText: "Blacklist",
@@ -251,7 +257,8 @@ class _RegistrationOfficePageState
 
     })
     ],
-    ))]
+    )
+    )
     )
     ,
     )

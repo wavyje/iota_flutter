@@ -38,8 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Check Certificate"),
         "chooseImage": MessageLookupByLibrary.simpleMessage("Choose an Image"),
         "createQR": MessageLookupByLibrary.simpleMessage("Create QR Code"),
-        "deleteDataButton":
-            MessageLookupByLibrary.simpleMessage("Change or Delete Data"),
+        "deleteDataButton": MessageLookupByLibrary.simpleMessage("Delete Data"),
         "expirationDate":
             MessageLookupByLibrary.simpleMessage("Expiration Date: "),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
@@ -52,9 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "imageInformation": MessageLookupByLibrary.simpleMessage(
             "The image must show the face clearly"),
         "imageSuccess":
-            MessageLookupByLibrary.simpleMessage("Image saved successfully"),
+            MessageLookupByLibrary.simpleMessage("Image saved successfully!"),
         "imageWarning":
-            MessageLookupByLibrary.simpleMessage("A picture must be uploaded"),
+            MessageLookupByLibrary.simpleMessage("A picture must be uploaded!"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
         "nationality": MessageLookupByLibrary.simpleMessage("Nationality"),
         "notExisting": MessageLookupByLibrary.simpleMessage("Not Existing"),
