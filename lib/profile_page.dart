@@ -153,9 +153,67 @@ class _ProfilePageState extends State<ProfilePage> {
 
           ),
           Container(
-            margin: EdgeInsets.only(left:0, top:80, right:0, bottom:0),
+            margin: EdgeInsets.only(left:0, top:70, right:0, bottom:0),
           ),
-          CustomButton(onPressed: () { }, buttonText: AppLocalizations.of(context)!.deleteDataButton, icon: Icons.edit)
+          CustomButton(onPressed: () {
+            showDialog(context: context, builder: (BuildContext context) {
+              return AlertDialog(
+                content: Stack(
+                  clipBehavior: Clip
+                      .antiAlias,
+                  children: <
+                Widget>[
+                Positioned(
+                right: -40.0,
+                  top: -40.0,
+                  child: InkResponse(
+                    onTap: () {
+                      Navigator
+                          .of(
+                          context)
+                          .pop();
+                    },
+                    child: CircleAvatar(
+                      child: Icon(
+                          Icons
+                              .close),
+                      backgroundColor: Colors
+                          .red,
+                    ),
+                  ),
+                ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Do you really want to delete your data?", textAlign: TextAlign.center,),
+                        Container(padding: EdgeInsets.all(10),),
+                        Text("Doing so will erase everything from your phone and therefore invalidate your certificates!", textAlign: TextAlign.center,),
+                        Container(padding: EdgeInsets.all(10),),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(onPressed: () async {
+                              _deleteImage();
+                              _deleteData();
+                              _deleteLinks();
+                              _deleteCertificateDates();
+
+                              Navigator.popUntil(context, (Route<dynamic> predicate) => predicate.isFirst);
+                            }, buttonText: "Confirm", icon: Icons.warning_amber_outlined),
+                            Container(padding: EdgeInsets.all(10),),
+                            CustomButton(onPressed: () {
+                              Navigator.pop(context);
+                            }, buttonText: "Cancel", icon: Icons.cancel),
+                          ],
+                        )
+
+                      ],
+                    )
+                ]
+                )
+              );
+            });
+          }, buttonText: AppLocalizations.of(context)!.deleteDataButton, icon: Icons.cancel)
             ]
 
     ),
@@ -168,6 +226,16 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _imagePath = (prefs.getString('profile_image') ?? "Not Found");
     });
+  }
+
+  void _deleteImage() async {
+    File file = await _imageFile;
+
+    file.delete();
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.clear();
   }
 
   void _loadData() async {
@@ -186,6 +254,12 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void _deleteData() async {
+    final file = await _localFile;
+
+    file.delete();
+  }
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
@@ -194,5 +268,31 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<File> get _localFile async {
     final path = await _localPath;
     return File('$path/data.txt');
+  }
+
+  Future<File> get _imageFile async  {
+    final path = await _localPath;
+    return File('$path/image');
+  }
+
+  Future<File> get _localLinkFile async {
+    final path = await _localPath;
+    return File('$path/links.txt');
+  }
+
+  Future<File> get _localCertificateFile async {
+    final path = await _localPath;
+    return File('$path/certificate.txt');
+  }
+
+  void _deleteLinks() async {
+    final file = await _localLinkFile;
+
+    file.delete();
+  }
+  void _deleteCertificateDates() async {
+    final file = await _localCertificateFile;
+
+    file.delete();
   }
 }

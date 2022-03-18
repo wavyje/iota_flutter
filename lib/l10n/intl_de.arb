@@ -11,7 +11,7 @@
   "checkCertificate": "Zertifikat überprüfen",
   "chooseImage": "Bild auswählen",
   "createQR": "QR Code erstellen",
-  "deleteDataButton": "Daten ändern oder löschen",
+  "deleteDataButton": "Daten löschen",
   "expirationDate": "Gültig bis: ",
   "firstName": "Vorname",
   "healthCertificate": "Gesundheitszertifikat",

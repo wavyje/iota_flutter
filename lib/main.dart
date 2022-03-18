@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:iota_app/generated/l10n.dart';
 import './DataInput.dart';
 import './Buttons.dart';
+import 'dart:io';
 import './office_page.dart';
 import './customer_scan.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'loggedinprostitute.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,13 +29,15 @@ class MyApp extends StatefulWidget {
 // is a state, kind of static, contains the widgets
 class _MyAppState extends State<MyApp> {
 
-  void dd() {
-    // for different input, calls build method and rebuilds the widget tree
-    setState(() {
-      var nextPage = 0;
-    });
-    print('Button pressed');
-  }
+  AppBar appBar = AppBar(
+    title: Text('IOTA HEALTH',
+      style: TextStyle(
+        color: Colors.white,
+        letterSpacing: 5,
+      ),
+    ),
+    centerTitle: true,
+  );
   
   @override
   Widget build(BuildContext context) {
@@ -54,16 +60,9 @@ class _MyAppState extends State<MyApp> {
         ),
 
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('IOTA HEALTH',
-            style: TextStyle(
-                color: Colors.white,
-            letterSpacing: 5,
-            ),
-          ),
-          centerTitle: true,
-        ),
+        appBar: appBar,
         body: Container(
+
           alignment: Alignment.center,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -77,7 +76,9 @@ class _MyAppState extends State<MyApp> {
 
             ),
           ),
-        child: Column(
+
+        child: SingleChildScrollView(
+          child: Column(
           children: <Widget>[
             Text("Pre-Alpha developed by Jendrik Mann", style: TextStyle(color: Colors.white),),
             Text("jendrik.mann@uni-oldenburg.de", style: TextStyle(color: Colors.white),),
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ),
       ),
+    )
     );
   }
 }
@@ -124,10 +126,22 @@ class ButtonTest extends StatelessWidget {
           Container(margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),),
           ConstrainedBox(constraints: BoxConstraints.tightFor(width: 250),
           child: CustomButton(
-            onPressed: () {Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DataInput()),
-            );},
+            onPressed: () async {
+
+              bool alreadyRegistered = await _localFileExists();
+
+              if(!alreadyRegistered) {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DataInput()),
+            );}
+              else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserMenu()),
+                );
+              }
+          },
             buttonText: AppLocalizations.of(context)!.prostituteLogin,
             icon: Icons.account_circle_outlined,
           ),
@@ -152,4 +166,18 @@ class ButtonTest extends StatelessWidget {
   }
 }
 
+Future<bool> _localFileExists() async {
+  final path = await _localPath;
 
+  if(await File('$path/data.txt').exists()) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+  return directory.path;
+}

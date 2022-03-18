@@ -7,7 +7,7 @@ import 'package:iota_app/Buttons.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'websocket_connection.dart';
 
 
 
@@ -64,9 +64,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
         });
 
         _channel.sink.add("Empfangen");
-        setState(() {
-          loading = true;
-        });
+
       }
     });
 
@@ -158,8 +156,9 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
   // join the websocket server with the id transferred by the qr-code
   void _joinServer() {
+    var ipAddress = WebsocketConnection().ipAddress;
      _channel = WebSocketChannel.connect(
-      Uri.parse('ws://134.106.186.38:8080/' + roomId),
+      Uri.parse(ipAddress + roomId),
     );
   }
 
@@ -180,6 +179,8 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
     String expireDate = expire();
 
+    //TODO: psk oben implementen damit gespeichert wird dann übertragung schaune
+
     Map json = {'password': password,
                 'firstName': firstName,
                 'lastName': lastName,
@@ -192,7 +193,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
     print(json);
     return http.post(
 
-      Uri.parse('http://134.106.186.38:8080/certificate'),
+      Uri.parse(WebsocketConnection().httpAddress + 'certificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -204,7 +205,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
   Future<http.Response> sendPassword(data) {
     Map json = {'password': data};
     return http.post(
-      Uri.parse('http://134.106.186.38:8080/login'),
+      Uri.parse(WebsocketConnection().httpAddress + 'login_registration_office'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -245,6 +246,11 @@ class _CertificateUploadState extends State<CertificateUpload> {
                       left: 0, top: 10, right: 0, bottom: 0),
                 ),
                 CustomButton(onPressed: () async {
+
+                          setState(() {
+                            loading = true;
+                          });
+
                           var response = await sendPassword(await generateHash(controller.text));
 
                           if(response.statusCode == 200) {
@@ -252,17 +258,21 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
                             Navigator.of(context).pop("true");
 
-                              response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
+                              var responseCert = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
 
-                              if(response.statusCode == 200) {
+                              if(responseCert.statusCode == 200) {
 
-                                Map links = jsonDecode(response.body);
+                                Map links = jsonDecode(responseCert.body);
                                 links['expireDate'] = expireDate;
 
                                 var linksjson = jsonEncode(links);
                                 print(linksjson);
                                  _channel.sink.add(linksjson);
                                  _channel.sink.close();
+
+                                 setState(() {
+                                   success = true;
+                                 });
 
                               }
                               else {

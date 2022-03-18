@@ -5,17 +5,19 @@ import './health_certificate_upload.dart';
 
 class OfficeScan extends StatefulWidget {
   final bool doctorLoggedIn;
-  OfficeScan({required Key key, required this.doctorLoggedIn});
+  final String lanr;
+  OfficeScan({required Key key, required this.doctorLoggedIn, required this.lanr});
   @override
   _OfficeScanState createState() {
-    return _OfficeScanState(doctorLoggedIn: doctorLoggedIn);
+    return _OfficeScanState(doctorLoggedIn: doctorLoggedIn, lanr: lanr);
   }
 
 }
 
 class _OfficeScanState extends State<OfficeScan> {
   final bool doctorLoggedIn;
-  _OfficeScanState({required this.doctorLoggedIn});
+  final String lanr;
+  _OfficeScanState({required this.doctorLoggedIn, required this.lanr});
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late QRViewController controller;
@@ -57,7 +59,7 @@ class _OfficeScanState extends State<OfficeScan> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) =>
-                HealthCertificateUpload(key: UniqueKey(), roomId: arr[1])),
+                HealthCertificateUpload(key: UniqueKey(), roomId: arr[1], lanr: lanr,)),
           );
         }
 

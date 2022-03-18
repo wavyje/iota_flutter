@@ -1,9 +1,11 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:iota_app/Buttons.dart';
+import 'package:iota_app/websocket_connection.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,16 +17,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HealthCertificateUpload extends StatefulWidget {
   final String roomId;
-  HealthCertificateUpload({required Key key, required this.roomId});
+  final String lanr;
+  HealthCertificateUpload({required Key key, required this.roomId, required this.lanr});
 
   @override
   _HealthCertificateUploadState createState() {
-    return _HealthCertificateUploadState(roomId: roomId);
+    return _HealthCertificateUploadState(roomId: roomId, lanr: this.lanr);
   }
 }
 
 class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   final String roomId;
+  final String lanr;
   var _channel;
   String firstName = "";
   String lastName = "";
@@ -40,6 +44,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   String KeyloadMsgId = "";
   String SignedMsgId = "";
   String AnnounceMsgId = "";
+  String pskSeed = "";
 
   bool dataArrived = false;
   bool loading = false;
@@ -47,7 +52,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   bool registrationValid = false;
   TextEditingController controller = TextEditingController();
 
-  _HealthCertificateUploadState({required this.roomId});
+  _HealthCertificateUploadState({required this.roomId, required this.lanr});
 
   @override
   void initState() {
@@ -88,6 +93,9 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
           KeyloadMsgId = jsonDecode(element)['KeyloadMsgId'];
           SignedMsgId = jsonDecode(element)['SignedMsgId'];
           AnnounceMsgId = jsonDecode(element)['AnnounceMsgId'];
+          pskSeed = jsonDecode(element)['PskSeed'];
+
+
 
           dataArrived = true;
           loading = true;
@@ -102,7 +110,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
           });
         }
         else {
-
+          print("what");
 
         }
       }
@@ -197,8 +205,9 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
 
 
   void _joinServer() {
+    var ipAddress = WebsocketConnection().ipAddress;
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://134.106.186.38:8080/' + roomId),
+      Uri.parse(ipAddress + roomId),
     );
   }
 
@@ -227,11 +236,14 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
       'hashedImage': hashedImage,
       'expire': expireDate,
       'KeyloadMsgId': KeyloadMsgId,
-      'SignedMsgId': SignedMsgId};
+      'SignedMsgId': SignedMsgId,
+      'PskSeed': pskSeed,
+      'lanr': lanr,
+      'appInst': appInst};
     print(json);
     return http.post(
 
-      Uri.parse('http://134.106.186.38:8080/healthCertificate'),
+      Uri.parse(WebsocketConnection().httpAddress + 'healthCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -242,7 +254,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   Future<http.Response> sendPassword(data) {
     Map json = {'password': data};
     return http.post(
-      Uri.parse('http://134.106.186.38:8080/login'),
+      Uri.parse(WebsocketConnection().httpAddress + 'login'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -261,35 +273,17 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.password,
-                labelStyle: TextStyle(color: Colors.black),
-                fillColor: Colors.black,
-                focusColor: Colors.black
-            ),
-              cursorColor: Colors.black,
-              controller: controller,
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter password';
-                }
-                return null;
-              },
-            ),
+
             Container(
               margin: EdgeInsets.only(
                   left: 0, top: 10, right: 0, bottom: 0),
             ),
             CustomButton(onPressed: () async {
-              var response = await sendPassword(await generateHash(controller.text));
 
-              if(response.statusCode == 200) {
-                print(response.body);
 
-                Navigator.of(context).pop("true");
 
-                response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
+
+                var response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
 
                 if(response.statusCode == 200) {
                   //print(response.body);
@@ -307,11 +301,8 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
                 }
 
                 //then createAlbum
-              }
-              else {
-                print("Response failed");
-                Navigator.of(context).pop("password");
-              }
+
+
 
             },
                 buttonText: "Confirm with Password",
@@ -368,15 +359,19 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
     String root = await generateRoot(hashLeafAB, leafCD);
 
 
+
+
     Map json = {'rootHash': root,
       'appInst': appInst,
       'AnnounceMsgId': AnnounceMsgId,
       'KeyloadMsgId': KeyloadMsgId,
-      'SignedMsgId': SignedMsgId};
+      'SignedMsgId': SignedMsgId,
+      'PskSeed': pskSeed};
     print(json);
+    String j = jsonEncode(json);
     return http.post(
 
-      Uri.parse('http://134.106.186.38:8080/CheckCertificate'),
+      Uri.parse(WebsocketConnection().httpAddress + 'CheckCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },

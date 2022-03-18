@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:iota_app/websocket_connection.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,6 +36,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
   String KeyloadMsgId = "";
   String SignedMsgId = "";
   String TaggedMsgId = "";
+  String pskSeed = "";
 
   bool dataArrived = false;
   bool registrationLoading = false;
@@ -43,6 +45,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
   bool healthCertificateSuccess = false;
   bool registrationNotValid = false;
   bool healthCertificateNotValid = false;
+  bool doctorBlacklisted = false;
 
   TextEditingController controller = TextEditingController();
 
@@ -71,6 +74,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
           SignedMsgId = jsonDecode(element)['SignedMsgId'];
           AnnounceMsgId = jsonDecode(element)['AnnounceMsgId'];
           TaggedMsgId = jsonDecode(element)['TaggedMsgId'];
+          pskSeed = jsonDecode(element)['PskSeed'];
 
           dataArrived = true;
           registrationLoading = true;
@@ -101,6 +105,18 @@ class _CertificateCheckState extends State<CertificateCheck> {
           setState(() {
             healthCertificateLoading = false;
             healthCertificateSuccess = true;
+          });
+        }
+        else if(secondResponse.statusCode == 400) {
+          setState(() {
+            healthCertificateLoading = false;
+            doctorBlacklisted = true;
+          });
+        }
+        else if(secondResponse.statusCode == 403) {
+          setState(() {
+            healthCertificateLoading = false;
+            doctorBlacklisted = true;
           });
         }
         else {
@@ -210,6 +226,8 @@ class _CertificateCheckState extends State<CertificateCheck> {
                 Text(AppLocalizations.of(context)!.registrationCertificateNotFound),
               if(healthCertificateNotValid)
                 Text(AppLocalizations.of(context)!.healthCertificateNotFound),
+              if(doctorBlacklisted)
+                Text("Doctor is blacklisted! Certificate therefore is not valid")
             ],
           ),
         ),
@@ -219,8 +237,9 @@ class _CertificateCheckState extends State<CertificateCheck> {
 
   // joins the websocket
   void _joinServer() {
+    var ipAddress = WebsocketConnection().ipAddress;
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://134.106.186.38:8080/' + roomId),
+      Uri.parse(ipAddress + roomId),
     );
   }
 
@@ -258,11 +277,12 @@ class _CertificateCheckState extends State<CertificateCheck> {
                 'appInst': appInst,
                 'AnnounceMsgId': AnnounceMsgId,
                 'KeyloadMsgId': KeyloadMsgId,
-                'SignedMsgId': SignedMsgId};
+                'SignedMsgId': SignedMsgId,
+                'PskSeed': pskSeed};
     print(json);
     return http.post(
 
-      Uri.parse('http://134.106.186.38:8080/CheckCertificate'),
+      Uri.parse(WebsocketConnection().httpAddress + 'CheckCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -292,11 +312,12 @@ class _CertificateCheckState extends State<CertificateCheck> {
       'appInst': appInst,
       'AnnounceMsgId': AnnounceMsgId,
       'KeyloadMsgId': KeyloadMsgId,
-      'TaggedMsgId': TaggedMsgId};
+      'TaggedMsgId': TaggedMsgId,
+      'PskSeed': pskSeed};
     print(json);
     return http.post(
 
-      Uri.parse('http://134.106.186.38:8080/CheckHealthCertificate'),
+      Uri.parse(WebsocketConnection().httpAddress + 'CheckHealthCertificate'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
