@@ -33,7 +33,25 @@ class _RegistrationOfficePageState
   bool removeRequestUnsuccessful = false;
   bool removeRequestSuccessful = false;
 
+  bool loggedIn = false;
+  bool officeLoggedIn = false;
+  bool doctorLoggedIn = false;
+  bool passwordIncorrect = false;
+  bool loginUnsuccessful = false;
+  bool doctorBlacklisted = false;
+  bool lanrInvalid = false;
+  bool lanrAlreadyInDatabase = false;
+
+
+  bool registration = false;
+  bool registrationSuccessful = false;
+
+  TextEditingController controller = TextEditingController();
+  TextEditingController passwordDoctor = TextEditingController();
+  TextEditingController passwordRegistrationOffice = TextEditingController();
   TextEditingController lanr = TextEditingController();
+  TextEditingController name = TextEditingController();
+
 
   AppBar appBar = AppBar(
       title: Text('IOTA HEALTH',
@@ -56,10 +74,9 @@ class _RegistrationOfficePageState
     ),
 
     home: Scaffold(
-    appBar: appBar,
-    body: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
 
-    child: Container(
+    body: Container(
      height: MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top,
 
     alignment: Alignment.center,
@@ -75,15 +92,99 @@ class _RegistrationOfficePageState
 
     ),
     ),
+    child: SingleChildScrollView (
     child: Column(
 
     children: <Widget>[
-    Container(padding: EdgeInsets.all(100),),
+
 
     /*
      * Button for uploading the registration certificate
      */
+      if(!loggedIn)
+      CustomButton(onPressed: () {
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            content: Stack(
+                clipBehavior: Clip.hardEdge,
+                children: <Widget>[
+                  Positioned(
+                    right: -40.0,
+                    top: -40.0,
+                    child: InkResponse(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: CircleAvatar(
+                        child: Icon(Icons.close),
+                        backgroundColor: Colors.red,
+                      ),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                  child: Form(child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.password,
+                          ),
+                          obscureText: true,
+                          controller: passwordRegistrationOffice,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(context)!.obligatoryField;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
 
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          child: Text("Login"),
+                          onPressed: () async {
+
+
+                            var response = await sendPassword(passwordRegistrationOffice.text);
+
+                            if (response.statusCode == 200) {
+
+                              setState(() {
+                                loggedIn = true;
+                                officeLoggedIn = true;
+                                passwordIncorrect = false;
+                              });
+
+                              Navigator.pop(context);
+
+
+                            }
+                            else {
+                              setState(() {
+                                passwordIncorrect = true;
+                              });
+                            }
+                          },
+
+                        ),
+                      ),
+                      if(passwordIncorrect)
+                        Text(AppLocalizations.of(context)!.passwordIncorrect),
+                    ],
+                  ))
+                  )
+                ]
+            ),
+          );
+        }
+        );
+      }
+          , buttonText: "Login Registration Office", icon: Icons.house_outlined),
+    if(loggedIn)
     CustomButton(onPressed: () async {
       Navigator.push(
         context,
@@ -96,6 +197,7 @@ class _RegistrationOfficePageState
 
     Container(padding: EdgeInsets.all(20),),
     //button for blacklisting a doctor
+      if(loggedIn)
     CustomButton(
     buttonText: "Blacklist",
     icon: Icons.warning_amber_outlined,
@@ -259,8 +361,8 @@ class _RegistrationOfficePageState
     ],
     )
     )
-    )
-    ,
+    ),
+
     )
     );
   }

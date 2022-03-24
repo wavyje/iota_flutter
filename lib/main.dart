@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iota_app/about.dart';
 import 'package:iota_app/generated/l10n.dart';
+import 'package:iota_app/profile_page.dart';
+import 'package:iota_app/qr_page.dart';
+import 'package:iota_app/registration_office_page.dart';
 import './DataInput.dart';
 import './Buttons.dart';
 import 'dart:io';
@@ -10,6 +14,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'doctor_page.dart';
 import 'loggedinprostitute.dart';
 
 void main() {
@@ -29,14 +34,38 @@ class MyApp extends StatefulWidget {
 // is a state, kind of static, contains the widgets
 class _MyAppState extends State<MyApp> {
 
+  static List<Widget> _pages = <Widget>[
+    ProfilePage(),
+    QrPage(),
+    CustomerScan(),
+    DoctorPage(lanr: '0',),
+    RegistrationOfficePage(),
+    DataInput()
+  ];
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   AppBar appBar = AppBar(
     title: Text('IOTA HEALTH',
       style: TextStyle(
         color: Colors.white,
         letterSpacing: 5,
+
       ),
+
     ),
-    centerTitle: true,
+    centerTitle: false,
+
+    actions: [
+        About()
+    ],
   );
   
   @override
@@ -54,41 +83,45 @@ class _MyAppState extends State<MyApp> {
       ],
 
       theme: ThemeData(
-
+        canvasColor: Colors.transparent,
         primaryColor: Colors.deepPurpleAccent,
 
         ),
 
       home: Scaffold(
+        extendBody: true,
+
         appBar: appBar,
-        body: Container(
-
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                Colors.deepPurpleAccent,
-                //Color(0xFFE1BEE7),
-                Colors.purpleAccent
-              ],
-
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_outlined, color: Colors.white,),
+              label: 'Profile',
             ),
-          ),
-
-        child: SingleChildScrollView(
-          child: Column(
-          children: <Widget>[
-            Text("Pre-Alpha developed by Jendrik Mann", style: TextStyle(color: Colors.white),),
-            Text("jendrik.mann@uni-oldenburg.de", style: TextStyle(color: Colors.white),),
-
-            ButtonTest(),
-
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code_2_rounded, color: Colors.white,),
+              label: 'Certificates',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code_scanner_rounded, color: Colors.white,),
+              label: 'Check',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_hospital_outlined, color: Colors.white,),
+              label: 'Doctor',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.house_outlined, color: Colors.white,),
+              label: 'Office',
+            ),
           ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.white,
+          onTap: _onItemTapped,
+          backgroundColor: Colors.black,
+          elevation: 1,
         ),
-        ),
-      ),
+        body: _pages[_selectedIndex],
     )
     );
   }
@@ -164,7 +197,10 @@ class ButtonTest extends StatelessWidget {
 
       );
   }
+
 }
+
+
 
 Future<bool> _localFileExists() async {
   final path = await _localPath;

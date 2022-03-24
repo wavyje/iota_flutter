@@ -9,26 +9,7 @@ class DataInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', ''),
-        Locale('de', ''),
-      ],
-      theme: ThemeData(
-        primaryColor: Colors.deepPurpleAccent,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.registrationPage, style: TextStyle(color: Colors.white, letterSpacing: 5),
-          ),
-          centerTitle: true,
-        ),
+    return Scaffold(
 
         body:
         new ListView(
@@ -56,7 +37,6 @@ class DataInput extends StatelessWidget {
       ),
           ]
       ),
-      ),
-    );
+      );
   }
 }

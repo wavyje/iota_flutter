@@ -78,6 +78,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
         primaryColor: Colors.deepPurpleAccent,
       ),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.certificates,
             style: TextStyle(color: Colors.white, letterSpacing: 5),
@@ -130,7 +131,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
               CustomButton(onPressed: () { getResponse(); },
                   buttonText: AppLocalizations.of(context)!.uploadCertificate, icon: Icons.check),
               Container(
-                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
+                margin: EdgeInsets.only(left:0, top:15, right:0, bottom:0),
               ),
               if(loading)
                 CircleAvatar(backgroundImage: Image
@@ -146,6 +147,10 @@ class _CertificateUploadState extends State<CertificateUpload> {
                   radius: 100,
                   backgroundColor: Colors.transparent,
                 ),
+              if(success)
+                CustomButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }, buttonText: "Return", icon: Icons.check)
             ],
           ),
           ),
@@ -231,6 +236,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
                     fillColor: Colors.black,
                     focusColor: Colors.black
                 ),
+                  obscureText: true,
                   cursorColor: Colors.black,
                   controller: controller,
                   // The validator receives the text that the user has entered.

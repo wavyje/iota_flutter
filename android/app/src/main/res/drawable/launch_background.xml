@@ -7,6 +7,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/iota_logo_very_small" />
+            android:src="@drawable/powered_by_iota_white" />
     </item>
 </layer-list>

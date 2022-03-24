@@ -101,6 +101,7 @@ class _CertificateCheckState extends State<CertificateCheck> {
         }
 
        var secondResponse = await checkHealthCertificate();
+        print(secondResponse.statusCode);
         if(secondResponse.statusCode == 200) {
           setState(() {
             healthCertificateLoading = false;
@@ -132,106 +133,221 @@ class _CertificateCheckState extends State<CertificateCheck> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.deepPurpleAccent,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.certificates,
-            style: TextStyle(color: Colors.white, letterSpacing: 5),
-          ),
-          centerTitle: true,
-        ),
-        body: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                Colors.deepPurpleAccent,
-                //Color(0xFFE1BEE7),
-                Colors.purpleAccent
-              ],
+    return Scaffold(
 
-            ),
-          ),
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
-              ),
-              Text(AppLocalizations.of(context)!.birthday + ": " + birthdate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-              Container(
-                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
-              ),
-
-              Container(
-                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
-              ),
-              if(!registrationSuccess || !healthCertificateSuccess)
-              Text(AppLocalizations.of(context)!.searchingNetwork),
-              Row(
-                children: [
-                  Container(margin: EdgeInsets.only(left: 20, top: 30, right: 0, bottom: 0),),
-                  Text(AppLocalizations.of(context)!.registrationCertificate + ":    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                  if(registrationLoading)
-                    CircleAvatar(backgroundImage: Image
-                        .asset('assets/images/IOTA_Spawn.gif')
-                        .image,
-                      radius: 20,
-                      backgroundColor: Colors.transparent,
-                    ),
-                  if(registrationSuccess)
-                    CircleAvatar(backgroundImage: Image
-                        .asset('assets/images/check.png')
-                        .image,
-                      radius: 20,
-                      backgroundColor: Colors.transparent,
-                    ),
-                ],
-              ),
-              if(registrationSuccess)
-              Text(AppLocalizations.of(context)!.expirationDate + ": " + expireRegistration, style: TextStyle(color: Colors.white),),
-              Container(margin: EdgeInsets.only(top: 20),),
-              Row(
-                children: [
-                  Container(margin: EdgeInsets.only(left: 20, top: 20, right: 0, bottom: 0),),
-                  Text(AppLocalizations.of(context)!.healthCertificate + ":    ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                  if(healthCertificateLoading)
-                    CircleAvatar(backgroundImage: Image
-                        .asset('assets/images/IOTA_Spawn.gif')
-                        .image,
-                      radius: 20,
-                      backgroundColor: Colors.transparent,
-                    ),
-                  if(healthCertificateSuccess)
-                    CircleAvatar(backgroundImage: Image
-                        .asset('assets/images/check.png')
-                        .image,
-                      radius: 20,
-                      backgroundColor: Colors.transparent,
-                    ),
-                ],
-              ),
-              if(healthCertificateSuccess)
-              Text(AppLocalizations.of(context)!.expirationDate + ": " + expireHealth, style: TextStyle(color: Colors.white),),
-              Container(
-                margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
-              ),
-              if(registrationSuccess && healthCertificateSuccess)
-              Text(AppLocalizations.of(context)!.certificatesValid, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-              if(registrationNotValid)
-                Text(AppLocalizations.of(context)!.registrationCertificateNotFound),
-              if(healthCertificateNotValid)
-                Text(AppLocalizations.of(context)!.healthCertificateNotFound),
-              if(doctorBlacklisted)
-                Text("Doctor is blacklisted! Certificate therefore is not valid")
+      body: Container(
+        alignment: Alignment
+            .center,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment
+                .topLeft,
+            end: Alignment
+                .bottomRight,
+            colors: <Color>[
+              Colors
+                  .deepPurpleAccent,
+              //Color(0xFFE1BEE7),
+              Colors
+                  .purpleAccent
             ],
+
           ),
         ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets
+                  .only(
+                  left: 0,
+                  top: 30,
+                  right: 0,
+                  bottom: 0),
+            ),
+            Text(
+              AppLocalizations
+                  .of(
+                  context)!
+                  .birthday +
+                  ": " +
+                  birthdate,
+              style: TextStyle(
+                  color: Colors
+                      .white,
+                  fontWeight: FontWeight
+                      .bold),),
+            Container(
+              margin: EdgeInsets
+                  .only(
+                  left: 0,
+                  top: 30,
+                  right: 0,
+                  bottom: 0),
+            ),
+
+            Container(
+              margin: EdgeInsets
+                  .only(
+                  left: 0,
+                  top: 30,
+                  right: 0,
+                  bottom: 0),
+            ),
+            if(!registrationSuccess ||
+                !healthCertificateSuccess)
+              Text(
+                  AppLocalizations
+                      .of(
+                      context)!
+                      .searchingNetwork),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets
+                      .only(
+                      left: 20,
+                      top: 30,
+                      right: 0,
+                      bottom: 0),),
+                Text(
+                  AppLocalizations
+                      .of(
+                      context)!
+                      .registrationCertificate +
+                      ":    ",
+                  style: TextStyle(
+                      color: Colors
+                          .white,
+                      fontWeight: FontWeight
+                          .bold),),
+                if(registrationLoading)
+                  CircleAvatar(
+                    backgroundImage: Image
+                        .asset(
+                        'assets/images/IOTA_Spawn.gif')
+                        .image,
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent,
+                  ),
+                if(registrationSuccess)
+                  CircleAvatar(
+                    backgroundImage: Image
+                        .asset(
+                        'assets/images/check.png')
+                        .image,
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent,
+                  ),
+              ],
+            ),
+            if(registrationSuccess)
+              Text(
+                AppLocalizations
+                    .of(
+                    context)!
+                    .expirationDate +
+                    ": " +
+                    expireRegistration,
+                style: TextStyle(
+                    color: Colors
+                        .white),),
+            Container(
+              margin: EdgeInsets
+                  .only(
+                  top: 20),),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets
+                      .only(
+                      left: 20,
+                      top: 20,
+                      right: 0,
+                      bottom: 0),),
+                Text(
+                  AppLocalizations
+                      .of(
+                      context)!
+                      .healthCertificate +
+                      ":    ",
+                  style: TextStyle(
+                      color: Colors
+                          .white,
+                      fontWeight: FontWeight
+                          .bold),),
+                if(healthCertificateLoading)
+                  CircleAvatar(
+                    backgroundImage: Image
+                        .asset(
+                        'assets/images/IOTA_Spawn.gif')
+                        .image,
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent,
+                  ),
+                if(healthCertificateSuccess)
+                  CircleAvatar(
+                    backgroundImage: Image
+                        .asset(
+                        'assets/images/check.png')
+                        .image,
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent,
+                  ),
+              ],
+            ),
+            if(healthCertificateSuccess)
+              Text(
+                AppLocalizations
+                    .of(
+                    context)!
+                    .expirationDate +
+                    ": " +
+                    expireHealth,
+                style: TextStyle(
+                    color: Colors
+                        .white),),
+            Container(
+              margin: EdgeInsets
+                  .only(
+                  left: 0,
+                  top: 30,
+                  right: 0,
+                  bottom: 0),
+            ),
+            if(registrationSuccess &&
+                healthCertificateSuccess)
+              Text(
+                AppLocalizations
+                    .of(
+                    context)!
+                    .certificatesValid,
+                style: TextStyle(
+                    fontWeight: FontWeight
+                        .bold,
+                    fontSize: 14),),
+            if(registrationNotValid)
+              Text(
+                  AppLocalizations
+                      .of(
+                      context)!
+                      .registrationCertificateNotFound),
+            if(healthCertificateNotValid)
+              Text(
+                  AppLocalizations
+                      .of(
+                      context)!
+                      .healthCertificateNotFound),
+            if(doctorBlacklisted)
+              Text(
+                  "Doctor is blacklisted! Certificate therefore is not valid")
+          ],
+        ),
       ),
+
     );
   }
 

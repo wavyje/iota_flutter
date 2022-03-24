@@ -179,15 +179,15 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              if(registrationValid)
+              if(registrationValid && !success)
                 Text(AppLocalizations.of(context)!.healthCertificateUpload + expireDate, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-              if(loading)
+              /*if(loading)
                 CircleAvatar(backgroundImage: Image
                     .asset('assets/images/IOTA_Spawn.gif')
                     .image,
                   radius: 100,
                   backgroundColor: Colors.transparent,
-                ),
+                ),*/
               if(success)
                 CircleAvatar(backgroundImage: Image
                     .asset('assets/images/check.png')
@@ -195,6 +195,10 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
                   radius: 100,
                   backgroundColor: Colors.transparent,
                 ),
+              if(success)
+                CustomButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }, buttonText: "Return", icon: Icons.check)
             ],
           ),
           ),
@@ -280,7 +284,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
             ),
             CustomButton(onPressed: () async {
 
-
+              Navigator.of(context).pop();
 
 
                 var response = await createAlbum(await generateHash(controller.text), firstName, lastName, birthday, birthplace, nationality, address, hashedImage);
@@ -295,6 +299,13 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
                   _channel.sink.add(linksjson);
                   _channel.sink.close();
 
+
+
+                  setState(() {
+                    success = true;
+                  });
+
+
                 }
                 else {
                   Navigator.of(context).pop("error");
@@ -305,7 +316,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
 
 
             },
-                buttonText: "Confirm with Password",
+                buttonText: "Confirm",
                 icon: Icons.check),
           ],
         ),

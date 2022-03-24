@@ -173,7 +173,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           if(image)
             Text(AppLocalizations.of(context)!.imageSuccess, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           Container(
-            margin: EdgeInsets.only(left: 0, right: 0, top: 120, bottom: 0),
+            margin: EdgeInsets.only(left: 0, right: 0, top: 80, bottom: 0),
           ),
           CustomButton(
             onPressed: () async {
@@ -217,13 +217,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomButton(onPressed: () {
-                          Navigator.pop(context);
+
+                          Navigator.of(context).pop();
+
                           flag = true;
                         }, buttonText: "Register", icon: Icons.check),
                         Container(padding: EdgeInsets.all(10),),
+                        Expanded(child:
                         CustomButton(onPressed: () {
-                          Navigator.pop(context);
-                        }, buttonText: "Edit Data", icon: Icons.cancel),
+                          Navigator.of(context).pop();
+                        }, buttonText: "Edit Data", icon: Icons.cancel),),
                       ],
                     )
 
@@ -251,20 +254,18 @@ class MyCustomFormState extends State<MyCustomForm> {
                 }
               // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate() ) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('Processing Data')));
+
                 saveData(firstName.text, lastName.text, birthday.text, birthplace.text, nationality.text, address.text, hashedImage);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserMenu()),
-                );
+
+                Navigator.of(context).pop();
+
               }
               }
             },
             buttonText: AppLocalizations.of(context)!.registrationPage,
             icon: Icons.check,
           ),
-          ElevatedButton(
+          /*ElevatedButton(
             onPressed: () {
 
               Navigator.push(
@@ -273,7 +274,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               );
             },
             child: Text('Skip to Profile: Debug'),
-          ),
+          ),*/
 
         ],
       ),

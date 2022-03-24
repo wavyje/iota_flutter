@@ -9,6 +9,10 @@ import 'package:path_provider/path_provider.dart';
 import './Buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'DataInput.dart';
+import 'package:flutter/services.dart';
+
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() {
@@ -27,11 +31,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool showLoading = false;
 
+  bool registered = true;
+
   @override
   void initState() {
     super.initState();
-    _loadImage();
-    _loadData();
+
+
+      _loadImage();
+      _loadData();
+
+
+
   }
 
   // for different input, calls build method and rebuilds the widget tree
@@ -56,22 +67,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       child: Column(
         children: <Widget>[
-          AppBar(title: Text("IOTA HEALTH",
-            style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 5,
-            ),
-          ),
-            elevation: 25,
-            centerTitle: true,
-            toolbarOpacity: 0.8,
-          ),
           Container(
             margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
           ),
           CircleAvatar(backgroundImage: FileImage(File(_imagePath),
           ),
             radius: 100,
+
           ),
 
           IntrinsicHeight(
@@ -125,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                  Padding(padding: EdgeInsets.only(left: 0, right: 0, top: 30, bottom: 0),
                  child: const VerticalDivider(color: Colors.black, thickness: 2, width: 20,),
                  ),
+            if(_lastName != "")
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -153,8 +156,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
           ),
           Container(
-            margin: EdgeInsets.only(left:0, top:70, right:0, bottom:0),
+            margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
           ),
+          if(_lastName != "")
           CustomButton(onPressed: () {
             showDialog(context: context, builder: (BuildContext context) {
               return AlertDialog(
@@ -198,12 +202,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               _deleteLinks();
                               _deleteCertificateDates();
 
+                              setState(() {
+                                _imagePath = "";
+                                _lastName = "";
+                                _firstName = "";
+                                _birthday = "";
+                                _birthplace = "";
+                                _address = "";
+
+                                registered = false;
+                              });
+
                               Navigator.popUntil(context, (Route<dynamic> predicate) => predicate.isFirst);
                             }, buttonText: "Confirm", icon: Icons.warning_amber_outlined),
                             Container(padding: EdgeInsets.all(10),),
+                            Expanded(child:
                             CustomButton(onPressed: () {
                               Navigator.pop(context);
-                            }, buttonText: "Cancel", icon: Icons.cancel),
+                            }, buttonText: "Cancel", icon: Icons.cancel),),
                           ],
                         )
 
@@ -213,7 +229,24 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               );
             });
-          }, buttonText: AppLocalizations.of(context)!.deleteDataButton, icon: Icons.cancel)
+          }, buttonText: AppLocalizations.of(context)!.deleteDataButton, icon: Icons.cancel),
+          if(_lastName == "")
+            CustomButton(onPressed: () async {
+              await Navigator
+                  .of(
+                  context)
+                  .push(
+                  MaterialPageRoute(
+                      builder: (
+                          context) =>
+                          DataInput()))
+                  .then((
+                  value) => _loadData());
+            }
+
+
+                , buttonText: AppLocalizations.of(context)!.registrationPage, icon: Icons.account_circle_outlined)
+
             ]
 
     ),
@@ -226,6 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _imagePath = (prefs.getString('profile_image') ?? "Not Found");
     });
+
   }
 
   void _deleteImage() async {
@@ -236,9 +270,13 @@ class _ProfilePageState extends State<ProfilePage> {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.clear();
+
   }
 
   void _loadData() async {
+
+    imageCache!.clear();
+
     final file = await _localFile;
 
     //Read the file
@@ -252,6 +290,8 @@ class _ProfilePageState extends State<ProfilePage> {
       _birthday = json['birthday'];
       _birthplace = json['birthplace'];
     });
+
+    _loadImage();
   }
 
   void _deleteData() async {
