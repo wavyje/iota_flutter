@@ -39,7 +39,7 @@ class _CustomerScanState extends State<CustomerScan> {
       controller.pauseCamera();
       var arr = scanData.code.split('/');
       if (arr[0] == "UploadCertificate") {
-        Navigator.pop(context);
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CertificateCheck(key: UniqueKey(), roomId: arr[1])),

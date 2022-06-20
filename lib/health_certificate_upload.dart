@@ -50,6 +50,7 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
   bool loading = false;
   bool success = false;
   bool registrationValid = false;
+  bool hideUploadButton= false;
   TextEditingController controller = TextEditingController();
 
   _HealthCertificateUploadState({required this.roomId, required this.lanr});
@@ -173,8 +174,9 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              if(dataArrived && !success && registrationValid)
-                CustomButton(onPressed: () { getResponse(); },
+              if(dataArrived && !success && registrationValid && !hideUploadButton)
+                CustomButton(onPressed: () { getResponse();
+                },
                     buttonText: AppLocalizations.of(context)!.uploadCertificate, icon: Icons.check),
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
@@ -283,6 +285,10 @@ class _HealthCertificateUploadState extends State<HealthCertificateUpload> {
                   left: 0, top: 10, right: 0, bottom: 0),
             ),
             CustomButton(onPressed: () async {
+
+              setState(() {
+                hideUploadButton = true;
+              });
 
               Navigator.of(context).pop();
 

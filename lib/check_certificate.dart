@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:iota_app/Buttons.dart';
 import 'package:iota_app/websocket_connection.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import './crypto.dart';
@@ -343,7 +344,9 @@ class _CertificateCheckState extends State<CertificateCheck> {
                       .healthCertificateNotFound),
             if(doctorBlacklisted)
               Text(
-                  "Doctor is blacklisted! Certificate therefore is not valid")
+                  "Doctor is blacklisted! Certificate therefore is not valid"),
+            Container(padding: EdgeInsets.all(50),),
+            CustomButton(onPressed: () => Navigator.of(context).pop(), buttonText: "Return", icon: Icons.arrow_back)
           ],
         ),
       ),

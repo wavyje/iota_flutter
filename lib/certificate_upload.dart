@@ -37,6 +37,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
   bool dataArrived = false;
   bool loading = false;
   bool success = false;
+  bool hideUploadButton = false;
   TextEditingController controller = TextEditingController();
 
   _CertificateUploadState({required this.roomId});
@@ -127,7 +128,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
               Container(
                 margin: EdgeInsets.only(left:0, top:30, right:0, bottom:0),
               ),
-              if(dataArrived && !success)
+              if(dataArrived && !success && !hideUploadButton)
               CustomButton(onPressed: () { getResponse(); },
                   buttonText: AppLocalizations.of(context)!.uploadCertificate, icon: Icons.check),
               Container(
@@ -255,6 +256,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
 
                           setState(() {
                             loading = true;
+                            hideUploadButton = true;
                           });
 
                           var response = await sendPassword(await generateHash(controller.text));
@@ -305,7 +307,7 @@ class _CertificateUploadState extends State<CertificateUpload> {
       if(result == "true") {
         setState(() {
           loading = false;
-          success = true;
+
         });
       }
       else if(result == "error") {
